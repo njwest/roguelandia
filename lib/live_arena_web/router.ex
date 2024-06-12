@@ -68,6 +68,13 @@ defmodule LiveArenaWeb.Router do
       on_mount: [{LiveArenaWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserLive.UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserLive.UserSettingsLive, :confirm_email
+
+      live "/bosses", BossLive.Index, :index
+      live "/bosses/new", BossLive.Index, :new
+      live "/bosses/:id/edit", BossLive.Index, :edit
+
+      live "/bosses/:id", BossLive.Show, :show
+      live "/bosses/:id/show/edit", BossLive.Show, :edit
     end
   end
 

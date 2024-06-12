@@ -1,0 +1,31 @@
+<.header>
+  Boss <%= @boss.id %>
+  <:subtitle>This is a boss record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/bosses/#{@boss}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit boss</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @boss.name %></:item>
+  <:item title="Hp"><%= @boss.hp %></:item>
+  <:item title="Strength"><%= @boss.strength %></:item>
+  <:item title="Attack"><%= @boss.attack %></:item>
+  <:item title="Special"><%= @boss.special %></:item>
+  <:item title="Avatar url"><%= @boss.avatar_url %></:item>
+</.list>
+
+<.back navigate={~p"/bosses"}>Back to bosses</.back>
+
+<.modal :if={@live_action == :edit} id="boss-modal" show on_cancel={JS.patch(~p"/bosses/#{@boss}")}>
+  <.live_component
+    module={LiveArenaWeb.BossLive.FormComponent}
+    id={@boss.id}
+    title={@page_title}
+    action={@live_action}
+    boss={@boss}
+    patch={~p"/bosses/#{@boss}"}
+  />
+</.modal>

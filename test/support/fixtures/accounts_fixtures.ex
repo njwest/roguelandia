@@ -28,4 +28,22 @@ defmodule LiveArena.AccountsFixtures do
     [_, token | _] = String.split(captured_email.text_body, "[TOKEN]")
     token
   end
+
+  @doc """
+  Generate a player.
+  """
+  def player_fixture(attrs \\ %{}) do
+    {:ok, player} =
+      attrs
+      |> Enum.into(%{
+        attack: "some attack",
+        hp: 42,
+        level: 42,
+        special: "some special",
+        strength: 42
+      })
+      |> LiveArena.Accounts.create_player()
+
+    player
+  end
 end
