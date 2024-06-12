@@ -1,4 +1,4 @@
-defmodule LiveArenaWeb.UserLoginLive do
+defmodule LiveArenaWeb.UserLive.UserLoginLive do
   use LiveArenaWeb, :live_view
 
   def render(assigns) do

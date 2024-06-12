@@ -1,4 +1,4 @@
-defmodule LiveArenaWeb.UserResetPasswordLive do
+defmodule LiveArenaWeb.UserLive.UserResetPasswordLive do
   use LiveArenaWeb, :live_view
 
   alias LiveArena.Accounts

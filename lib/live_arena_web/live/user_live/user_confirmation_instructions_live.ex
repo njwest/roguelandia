@@ -1,4 +1,4 @@
-defmodule LiveArenaWeb.UserConfirmationInstructionsLive do
+defmodule LiveArenaWeb.UserLive.UserConfirmationInstructionsLive do
   use LiveArenaWeb, :live_view
 
   alias LiveArena.Accounts

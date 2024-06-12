@@ -1,4 +1,4 @@
-defmodule LiveArenaWeb.UserSettingsLive do
+defmodule LiveArenaWeb.UserLive.UserSettingsLive do
   use LiveArenaWeb, :live_view
 
   alias LiveArena.Accounts
