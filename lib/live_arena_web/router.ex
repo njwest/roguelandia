@@ -17,12 +17,6 @@ defmodule LiveArenaWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", LiveArenaWeb do
-    pipe_through :browser
-
-    get "/", PageController, :home
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", LiveArenaWeb do
   #   pipe_through :api
@@ -49,6 +43,7 @@ defmodule LiveArenaWeb.Router do
 
   scope "/", LiveArenaWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
+    get "/", PageController, :home
 
     live_session :redirect_if_user_is_authenticated,
       on_mount: [{LiveArenaWeb.UserAuth, :redirect_if_user_is_authenticated}] do
@@ -63,6 +58,8 @@ defmodule LiveArenaWeb.Router do
 
   scope "/", LiveArenaWeb do
     pipe_through [:browser, :require_authenticated_user]
+
+    live "/home", PlayerLive, :home
 
     live_session :require_authenticated_user,
       on_mount: [{LiveArenaWeb.UserAuth, :ensure_authenticated}] do

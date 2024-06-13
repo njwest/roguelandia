@@ -3,10 +3,48 @@ defmodule LiveArena.Accounts do
   The Accounts context.
   """
 
+  require Logger
   import Ecto.Query, warn: false
-  alias LiveArena.Repo
+  alias Ecto.Multi
 
+  alias LiveArena.Repo
   alias LiveArena.Accounts.{User, UserToken, UserNotifier}
+
+
+  def register_user_with_player(attrs) do
+    result =
+      Multi.new()
+      |> Multi.run(:user, fn _repo, %{} ->
+        attrs
+        |> register_user()
+      end)
+      |> Multi.run(:player, fn _repo, %{user: %{id: user_id}} ->
+          attrs
+          |> Map.put("user_id", user_id)
+          |> create_player()
+      end)
+      |> Repo.transaction()
+
+    case result do
+      # TODO MAYBE User player name taken case
+      {:ok, %{user: user}} ->
+        {:ok, user}
+      {:error, reason} ->
+        {:error, reason}
+      {:error, :user, changeset, %{}} ->
+        case changeset.errors do
+          error ->
+            Logger.error("User registration error.")
+            Logger.error(inspect(error))
+            {:error, "Sorry, an error occurred."}
+        end
+      error ->
+        Logger.error("User registration error.")
+        Logger.error(inspect(error))
+
+        {:error, "Sorry, a user registration error occurred."}
+    end
+  end
 
   ## Database getters
 

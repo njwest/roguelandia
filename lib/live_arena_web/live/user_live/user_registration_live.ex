@@ -22,7 +22,6 @@ defmodule LiveArenaWeb.UserLive.UserRegistrationLive do
         for={@form}
         id="registration_form"
         phx-submit="save"
-        phx-change="validate"
         phx-trigger-action={@trigger_submit}
         action={~p"/users/log_in?_action=registered"}
         method="post"
@@ -32,6 +31,7 @@ defmodule LiveArenaWeb.UserLive.UserRegistrationLive do
         </.error>
 
         <.input field={@form[:email]} type="email" label="Email" required />
+        <.input field={@form[:name]} type="text" label="Player Name" required />
         <.input field={@form[:password]} type="password" label="Password" required />
 
         <:actions>
@@ -54,7 +54,7 @@ defmodule LiveArenaWeb.UserLive.UserRegistrationLive do
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
-    case Accounts.register_user(user_params) do
+    case Accounts.register_user_with_player(user_params) do
       {:ok, user} ->
         {:ok, _} =
           Accounts.deliver_user_confirmation_instructions(

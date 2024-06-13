@@ -2,12 +2,17 @@ defmodule LiveArena.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias LiveArena.Repo
+  alias LiveArena.Accounts.Player
+
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
+    field :name, :string, virtual: true
     field :confirmed_at, :naive_datetime
+    has_one :player, Player
 
     timestamps(type: :utc_datetime)
   end
@@ -37,9 +42,22 @@ defmodule LiveArena.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :name])
     |> validate_email(opts)
     |> validate_password(opts)
+    |> validate_required([:name])
+    |> validate_player_name(attrs["name"])
+  end
+
+  defp validate_player_name(changeset, player_name) do
+    if is_nil(player_name) do
+      add_error(changeset, :name, "can't be blank")
+    else
+      case Repo.get_by(Player, name: player_name) do
+        %{name: _name} -> add_error(changeset, :name, "has already been taken")
+        _ -> changeset
+      end
+    end
   end
 
   defp validate_email(changeset, opts) do

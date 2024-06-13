@@ -5,6 +5,7 @@ defmodule LiveArenaWeb.UserAuth do
   import Phoenix.Controller
 
   alias LiveArena.Accounts
+  alias LiveArena.Repo
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -93,7 +94,9 @@ defmodule LiveArenaWeb.UserAuth do
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
     user = user_token && Accounts.get_user_by_session_token(user_token)
-    assign(conn, :current_user, user)
+    user_with_player = Repo.preload(user, :player)
+
+    assign(conn, :current_user, user_with_player)
   end
 
   defp ensure_user_token(conn) do
@@ -225,5 +228,5 @@ defmodule LiveArenaWeb.UserAuth do
 
   defp maybe_store_return_to(conn), do: conn
 
-  defp signed_in_path(_conn), do: ~p"/"
+  defp signed_in_path(_conn), do: ~p"/home"
 end
