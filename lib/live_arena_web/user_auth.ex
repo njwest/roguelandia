@@ -94,9 +94,8 @@ defmodule LiveArenaWeb.UserAuth do
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
     user = user_token && Accounts.get_user_by_session_token(user_token)
-    user_with_player = Repo.preload(user, :player)
 
-    assign(conn, :current_user, user_with_player)
+    assign(conn, :current_user, user)
   end
 
   defp ensure_user_token(conn) do

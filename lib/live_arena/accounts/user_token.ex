@@ -54,12 +54,13 @@ defmodule LiveArena.Accounts.UserToken do
   The token is valid if it matches the value in the database and it has
   not expired (after @session_validity_in_days).
   """
-  def verify_session_token_query(token) do
+  def verify_session_token_query(token_val) do
     query =
-      from token in by_token_and_context_query(token, "session"),
+      from token in by_token_and_context_query(token_val, "session"),
         join: user in assoc(token, :user),
+        join: player in assoc(user, :player),
         where: token.inserted_at > ago(@session_validity_in_days, "day"),
-        select: user
+        select: %{user | player: player}
 
     {:ok, query}
   end
