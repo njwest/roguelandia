@@ -1,0 +1,14 @@
+<%= if is_nil(@player.level) do %>
+    <div class="vh-100 flex flex-col"> 
+        <div class="grid grid-cols-2 h-4/5">
+            <button :for={player_class <- @classes} type="button" class="border border-black hover:opacity-75 text-4xl w-64 m-auto">
+                <img src={player_class["avatar_url"]} class="h-64 m-auto"/>
+                <%= player_class["name"] %>
+            </button>
+        </div>
+        <div class="dialogue-box h-1/5">
+        
+            Select a Class
+        </div> 
+    </div>
+<% end %>

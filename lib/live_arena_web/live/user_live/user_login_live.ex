@@ -3,9 +3,9 @@ defmodule LiveArenaWeb.UserLive.UserLoginLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
+    <.centered_dialogue id="login-dialogue" class="max-w-md">
       <.header class="text-center">
-        Log in to account
+        Enter Roguelandia
         <:subtitle>
           Don't have an account?
           <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
@@ -31,7 +31,7 @@ defmodule LiveArenaWeb.UserLive.UserLoginLive do
           </.button>
         </:actions>
       </.simple_form>
-    </div>
+    </.centered_dialogue>
     """
   end
 

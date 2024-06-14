@@ -1,12 +1,21 @@
 defmodule LiveArenaWeb.PlayerLive do
   use LiveArenaWeb, :live_view
 
-  alias LiveArena.NPC
+  @classes [
+    %{"name" => "Warrior", "hp" => 50, "strength" => 8, "attack" => "Slash", "avatar_url" => "/images/rogue-warrior.png"},
+    %{"name" => "Archer", "hp" => 55, "strength" => 6, "attack" => "Shoot", "avatar_url" => "/images/rogue-archer.png"},
+    %{"name" => "Cleric", "hp" => 60, "strength" => 5, "attack" => "Bash", "avatar_url" => "/images/rogue-cleric.png"},
+    %{"name" => "Robot", "hp" => 45, "strength" => 10, "attack" => "Bash", "avatar_url" => "/images/rogue-robot.png"}
+]
 
   @impl true
   def mount(_params, _session, socket) do
-    IO.inspect(socket.assigns)
-    {:ok, socket}
+    {
+      :ok,
+      socket
+      |> assign(:classes, @classes)
+      |> assign(:player, socket.assigns.current_user.player)
+    }
   end
 
   @impl true
