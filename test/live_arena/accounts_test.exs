@@ -564,7 +564,7 @@ defmodule LiveArena.AccountsTest do
 
     test "change_player/1 returns a player changeset" do
       player = player_fixture()
-      assert %Ecto.Changeset{} = Accounts.change_player(player)
+      assert %Ecto.Changeset{} = Pawn.change_player(player)
     end
   end
 end

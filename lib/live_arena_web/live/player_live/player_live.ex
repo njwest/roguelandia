@@ -1,15 +1,17 @@
 defmodule LiveArenaWeb.PlayerLive do
-  alias LiveArena.Accounts
+
   use LiveArenaWeb, :live_view
+  alias LiveArena.Pawn
 
   @impl true
   def mount(_params, _session, socket) do
-    changeset = Accounts.change_player(socket.assigns.current_user.player)
+    changeset = Pawn.change_player(socket.assigns.current_user.player)
     {
       :ok,
       socket
-      |> assign(:classes, @classes)
+      |> assign(:class_opts, Pawn.list_available_classes())
       |> assign(:player, socket.assigns.current_user.player)
+      |> assign(:class_selected, false)
       |> assign_form(changeset)
     }
   end
@@ -22,6 +24,24 @@ defmodule LiveArenaWeb.PlayerLive do
   defp apply_action(socket, _action, _params) do
     socket
     |> assign(:page_title, "Home")
+  end
+
+  @impl true
+  def handle_event("save", %{"player" => %{"class_id" => class_id}}, socket) do
+    case Pawn.set_player_class(socket.assigns.player.id, String.to_integer(class_id)) do
+      {:ok, _player} ->
+        {:noreply, redirect(socket, to: "/home")}
+      {:error, message} ->
+        {:noreply, put_flash(socket, :error, message)}
+    end
+  end
+
+  @impl true
+  def handle_event("validate", %{"player" => %{"class_id" => class_id}}, socket) do
+    {
+      :noreply,
+      assign(socket, :class_selected, !is_nil(class_id))
+    }
   end
 
   # @impl true

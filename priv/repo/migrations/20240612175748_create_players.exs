@@ -10,6 +10,7 @@ defmodule LiveArena.Repo.Migrations.CreatePlayers do
       add :strength, :integer
       add :attack, :string
       add :special, :string
+      add :avatar_url, :string
       add :user_id, references(:users, on_delete: :nothing)
       add :class_id, references(:classes, on_delete: :nothing)
 

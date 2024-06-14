@@ -68,11 +68,13 @@ input[type="radio"] {
 
 .radio-label img {
     display: block;
-    width: 100px;
-    height: 100px;
     object-fit: cover;
 }
 
 input[type="radio"]:checked + .radio-label {
-    border-color: #007bff;
+    border-color: cyan;
+}
+
+input[type="radio"]:checked + .radio-label img {
+    @apply opacity-85;
 }

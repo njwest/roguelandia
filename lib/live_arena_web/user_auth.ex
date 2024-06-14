@@ -5,7 +5,6 @@ defmodule LiveArenaWeb.UserAuth do
   import Phoenix.Controller
 
   alias LiveArena.Accounts
-  alias LiveArena.Repo
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change

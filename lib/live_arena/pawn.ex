@@ -197,4 +197,40 @@ defmodule LiveArena.Pawn do
   def change_class(%Class{} = class, attrs \\ %{}) do
     Class.changeset(class, attrs)
   end
+
+  def list_available_classes(limit \\ 4) do
+    query =
+      from c in Class,
+        left_join: p in Player, on: p.class_id == c.id and p.hp > 0,
+        group_by: c.id,
+        having: count(p.id) < c.active_limit,
+        select: %{
+          c | available: c.active_limit - count(p.id)
+        },
+        limit: ^limit
+
+    Repo.all(query)
+  end
+
+  def set_player_class(player_id, class_id) do
+    player = get_player!(player_id)
+
+    if is_nil(player.class_id) and is_nil(player.level) do
+      class = get_class!(class_id)
+      player
+      |> Player.changeset(%{
+          class_id: class_id,
+          hp: class.hp,
+          strength: class.strength,
+          attack: class.attack,
+          special: class.special,
+          level: 1,
+          experience: 0,
+          avatar_url: class.avatar_url
+        })
+      |> Repo.update()
+    else
+      {:error, "Player already has a class."}
+    end
+  end
 end

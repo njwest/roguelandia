@@ -1,16 +1,16 @@
-<%= if is_nil(@player.level) do %>
-    <div class="vh-100 flex flex-col">
-        <.form :let={_f} for={@form} as={nil}>
-            <div class="grid grid-cols-2 h-4/5">
-                <.input type="image-radio" image_options={@classes} field={@form[:name]}>
-
-                </.input>
+<%= if is_nil(@player.class_id) do %>
+    <.form for={@form} class="vh-100 flex flex-col" phx-submit="save" phx-change="validate">
+        <div class="grid grid-cols-2 h-4/5">
+            <.input type="image-radio" options={@class_opts} field={@form[:class_id]} />
+        </div>
+        <div class="dialogue-box h-1/5 flex">
+            <div class="m-auto">
+                <%= if @class_selected do %>
+                    <.button phx-disable-with="Saving...">Save Class</.button>
+                <% else %>
+                    <h2 class="text-center text-2xl sm:text-4xl">Select a Class</h2>
+                <% end %>
             </div>
-            <div class="dialogue-box h-1/5 flex">
-                <div class="m-auto">
-                    <.button phx-disable-with="Saving...">Select a Class</.button>
-                </div>
-            </div> 
-        </.form>
-    </div>
+        </div> 
+    </.form>
 <% end %>

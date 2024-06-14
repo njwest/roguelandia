@@ -297,8 +297,7 @@ defmodule LiveArenaWeb.CoreComponents do
   attr :errors, :list, default: []
   attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
-  attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
-  attr :image_options, :list, doc: "image options for image-radio inputs"
+  attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2 and the image-radio input"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
 
   attr :rest, :global,
@@ -319,26 +318,24 @@ defmodule LiveArenaWeb.CoreComponents do
   end
 
   def input(%{type: "image-radio"} = assigns) do
-    # assigns =
-    #   assign_new(assigns, :checked, fn ->
-    #     Phoenix.HTML.Form.normalize_value("radio", assigns[:value]) == assigns[:current_value]
-    #   end)
-
-      ~H"""
-        <button :for={option <- @image_options} type="button" class="border border-black hover:opacity-75 text-4xl w-64 m-auto">
-            <input
-                id={"#{option.name}-option"}
-                type="radio"
-                name={@name}
-                value={Phoenix.HTML.Form.normalize_value("radio", @value)}
-                checked={@value == option.name}
-            />
-            <label for={"#{option.name}-option"} class="radio-label select-none peer-checked:opacity-25">
-                <img src={option.avatar_url} class="h-64 m-auto">
-                <%= option.name %>
-            </label>
-        </button>
-      """
+    ~H"""
+      <label :for={option <- @options} class="border border-white hover:border-gray-200 hover:opacity-75 text-4xl w-full h-full m-auto cursor-pointer">
+        <input
+            id={"#{option.name}-option-#{option.id}"}
+            type="radio"
+            name={@name}
+            value={option.id}
+            checked={@value == option.id}
+            class="hidden"
+        />
+        <div class="radio-label select-none peer-checked:text-lime-200 text-center h-full w-full flex flex-col">
+          <div class="m-auto">
+            <img src={option.avatar_url} class="max-h-64">
+            <%= option.name %>
+          </div>
+        </div>
+    </label>
+    """
   end
 
   def input(%{type: "checkbox"} = assigns) do
@@ -468,7 +465,7 @@ defmodule LiveArenaWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-xl sm:text-4xl font-semibold leading-8 select-none">
+        <h1 class="text-xl sm:text-4xl leading-8 select-none">
           <%= render_slot(@inner_block) %>
         </h1>
         <p :if={@subtitle != []} class="sm:text-lg mt-2 leading-6 select-none">
