@@ -3,7 +3,7 @@ defmodule LiveArena.Accounts.User do
   import Ecto.Changeset
 
   alias LiveArena.Repo
-  alias LiveArena.Accounts.Player
+  alias LiveArena.Pawn.Player
 
   schema "users" do
     field :email, :string

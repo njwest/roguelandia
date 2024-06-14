@@ -50,3 +50,29 @@
     background-size: cover; 
     background-position: center;
  } */
+
+ .radio-group {
+    display: flex;
+    gap: 20px;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+.radio-label {
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.radio-label img {
+    display: block;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+input[type="radio"]:checked + .radio-label {
+    border-color: #007bff;
+}

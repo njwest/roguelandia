@@ -1,7 +1,7 @@
-defmodule LiveArenaWeb.BossLive.FormComponent do
+defmodule LiveArenaWeb.ClassLive.FormComponent do
   use LiveArenaWeb, :live_component
 
-  alias LiveArena.NPC
+  alias LiveArena.Pawn
 
   @impl true
   def render(assigns) do
@@ -9,12 +9,12 @@ defmodule LiveArenaWeb.BossLive.FormComponent do
     <div>
       <.header>
         <%= @title %>
-        <:subtitle>Manage boss records in your database.</:subtitle>
+        <:subtitle>Use this form to manage class records in your database.</:subtitle>
       </.header>
 
       <.simple_form
         for={@form}
-        id="boss-form"
+        id="class-form"
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
@@ -23,10 +23,10 @@ defmodule LiveArenaWeb.BossLive.FormComponent do
         <.input field={@form[:hp]} type="number" label="Hp" />
         <.input field={@form[:strength]} type="number" label="Strength" />
         <.input field={@form[:attack]} type="text" label="Attack" />
-        <.input field={@form[:special]} type="text" label="Special" />
         <.input field={@form[:avatar_url]} type="text" label="Avatar url" />
+        <.input field={@form[:active_limit]} type="number" label="Active limit" />
         <:actions>
-          <.button phx-disable-with="Saving...">Save Boss</.button>
+          <.button phx-disable-with="Saving...">Save Class</.button>
         </:actions>
       </.simple_form>
     </div>
@@ -34,8 +34,8 @@ defmodule LiveArenaWeb.BossLive.FormComponent do
   end
 
   @impl true
-  def update(%{boss: boss} = assigns, socket) do
-    changeset = NPC.change_boss(boss)
+  def update(%{class: class} = assigns, socket) do
+    changeset = Pawn.change_class(class)
 
     {:ok,
      socket
@@ -44,27 +44,27 @@ defmodule LiveArenaWeb.BossLive.FormComponent do
   end
 
   @impl true
-  def handle_event("validate", %{"boss" => boss_params}, socket) do
+  def handle_event("validate", %{"class" => class_params}, socket) do
     changeset =
-      socket.assigns.boss
-      |> NPC.change_boss(boss_params)
+      socket.assigns.class
+      |> Pawn.change_class(class_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
   end
 
-  def handle_event("save", %{"boss" => boss_params}, socket) do
-    save_boss(socket, socket.assigns.action, boss_params)
+  def handle_event("save", %{"class" => class_params}, socket) do
+    save_class(socket, socket.assigns.action, class_params)
   end
 
-  defp save_boss(socket, :edit, boss_params) do
-    case NPC.update_boss(socket.assigns.boss, boss_params) do
-      {:ok, boss} ->
-        notify_parent({:saved, boss})
+  defp save_class(socket, :edit, class_params) do
+    case Pawn.update_class(socket.assigns.class, class_params) do
+      {:ok, class} ->
+        notify_parent({:saved, class})
 
         {:noreply,
          socket
-         |> put_flash(:info, "Boss updated successfully")
+         |> put_flash(:info, "Class updated successfully")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -72,14 +72,14 @@ defmodule LiveArenaWeb.BossLive.FormComponent do
     end
   end
 
-  defp save_boss(socket, :new, boss_params) do
-    case NPC.create_boss(boss_params) do
-      {:ok, boss} ->
-        notify_parent({:saved, boss})
+  defp save_class(socket, :new, class_params) do
+    case Pawn.create_class(class_params) do
+      {:ok, class} ->
+        notify_parent({:saved, class})
 
         {:noreply,
          socket
-         |> put_flash(:info, "Boss created successfully")
+         |> put_flash(:info, "Class created successfully")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->

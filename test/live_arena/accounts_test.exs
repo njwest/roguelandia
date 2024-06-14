@@ -507,7 +507,7 @@ defmodule LiveArena.AccountsTest do
   end
 
   describe "players" do
-    alias LiveArena.Accounts.Player
+    alias LiveArena.Pawn.Player
 
     import LiveArena.AccountsFixtures
 

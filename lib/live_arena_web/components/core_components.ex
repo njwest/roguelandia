@@ -289,7 +289,7 @@ defmodule LiveArenaWeb.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file month number password
-               range search select tel text textarea time url week)
+               range search select tel text textarea time url week image-radio)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -298,6 +298,7 @@ defmodule LiveArenaWeb.CoreComponents do
   attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+  attr :image_options, :list, doc: "image options for image-radio inputs"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
 
   attr :rest, :global,
@@ -315,6 +316,29 @@ defmodule LiveArenaWeb.CoreComponents do
     |> assign_new(:name, fn -> if assigns.multiple, do: field.name <> "[]", else: field.name end)
     |> assign_new(:value, fn -> field.value end)
     |> input()
+  end
+
+  def input(%{type: "image-radio"} = assigns) do
+    # assigns =
+    #   assign_new(assigns, :checked, fn ->
+    #     Phoenix.HTML.Form.normalize_value("radio", assigns[:value]) == assigns[:current_value]
+    #   end)
+
+      ~H"""
+        <button :for={option <- @image_options} type="button" class="border border-black hover:opacity-75 text-4xl w-64 m-auto">
+            <input
+                id={"#{option.name}-option"}
+                type="radio"
+                name={@name}
+                value={Phoenix.HTML.Form.normalize_value("radio", @value)}
+                checked={@value == option.name}
+            />
+            <label for={"#{option.name}-option"} class="radio-label select-none peer-checked:opacity-25">
+                <img src={option.avatar_url} class="h-64 m-auto">
+                <%= option.name %>
+            </label>
+        </button>
+      """
   end
 
   def input(%{type: "checkbox"} = assigns) do

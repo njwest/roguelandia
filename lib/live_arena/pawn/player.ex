@@ -1,8 +1,9 @@
-defmodule LiveArena.Accounts.Player do
+defmodule LiveArena.Pawn.Player do
   use Ecto.Schema
   import Ecto.Changeset
 
   alias LiveArena.Accounts.User
+  alias LiveArena.Pawn.Class
 
   schema "players" do
     field :name, :string
@@ -13,6 +14,7 @@ defmodule LiveArena.Accounts.Player do
     field :strength, :integer
     field :attack, :string
     belongs_to :user, User
+    belongs_to :class, Class
 
     timestamps(type: :utc_datetime)
   end
@@ -20,7 +22,7 @@ defmodule LiveArena.Accounts.Player do
   @doc false
   def changeset(player, attrs) do
     player
-    |> cast(attrs, [:user_id, :name, :level, :experience, :hp, :strength, :attack, :special])
+    |> cast(attrs, [:user_id, :class_id, :name, :level, :experience, :hp, :strength, :attack, :special])
     |> validate_required([:user_id, :name])
     |> unique_constraint(:name)
   end
