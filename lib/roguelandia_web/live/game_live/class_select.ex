@@ -15,9 +15,13 @@ defmodule RoguelandiaWeb.GameLive.ClassSelect do
             <div class="dialogue-box flex-grow">
                 <div class="m-auto">
                     <%= if @class_selected do %>
-                        <.button phx-disable-with="Saving...">Save Class</.button>
+                        <.button class="w-full" phx-disable-with="Saving...">
+                            Continue
+                        </.button>
                     <% else %>
+                      <.button class="bg-black text-white w-full" disabled>
                         <h2 class="text-center text-2xl sm:text-4xl">Select a Class</h2>
+                        </.button>
                     <% end %>
                 </div>
             </div>
