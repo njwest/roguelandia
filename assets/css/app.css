@@ -73,8 +73,9 @@ input[type="radio"] {
 
 input[type="radio"]:checked + .radio-label {
     border-color: cyan;
+    @apply hover:opacity-100;
 }
 
 input[type="radio"]:checked + .radio-label img {
-    @apply opacity-85;
+    @apply grayscale-0;
 }

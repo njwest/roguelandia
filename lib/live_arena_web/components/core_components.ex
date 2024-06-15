@@ -319,7 +319,7 @@ defmodule LiveArenaWeb.CoreComponents do
 
   def input(%{type: "image-radio"} = assigns) do
     ~H"""
-      <label :for={option <- @options} class="border border-white hover:border-gray-200 hover:opacity-75 text-4xl w-full h-full m-auto cursor-pointer">
+      <label :for={option <- @options} class="border border-white hover:border-gray-200 text-4xl w-full h-full m-auto cursor-pointer">
         <input
             id={"#{option.name}-option-#{option.id}"}
             type="radio"
@@ -328,9 +328,9 @@ defmodule LiveArenaWeb.CoreComponents do
             checked={@value == option.id}
             class="hidden"
         />
-        <div class="radio-label select-none peer-checked:text-lime-200 text-center h-full w-full flex flex-col">
+        <div class="radio-label select-none peer-checked:text-lime-200 text-center h-full w-full flex flex-col hover:opacity-80">
           <div class="m-auto">
-            <img src={option.avatar_url} class="max-h-64">
+            <img src={option.avatar_url} class="max-h-64 grayscale">
             <%= option.name %>
           </div>
         </div>

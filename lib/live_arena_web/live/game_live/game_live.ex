@@ -1,18 +1,12 @@
 defmodule LiveArenaWeb.GameLive do
-
   use LiveArenaWeb, :live_view
-  alias LiveArena.Pawn
 
   @impl true
   def mount(_params, _session, socket) do
-    changeset = Pawn.change_player(socket.assigns.current_user.player)
     {
       :ok,
       socket
-      |> assign(:class_opts, Pawn.list_available_classes())
       |> assign(:player, socket.assigns.current_user.player)
-      |> assign(:class_selected, false)
-      |> assign_form(changeset)
     }
   end
 
@@ -27,37 +21,16 @@ defmodule LiveArenaWeb.GameLive do
   end
 
   @impl true
-  def handle_event("save", %{"player" => %{"class_id" => class_id}}, socket) do
-    case Pawn.set_player_class(socket.assigns.player.id, String.to_integer(class_id)) do
-      {:ok, _player} ->
-        {:noreply, redirect(socket, to: "/game")}
-      {:error, message} ->
-        {:noreply, put_flash(socket, :error, message)}
+  def handle_info({LiveArenaWeb.GameLive.ClassSelect, {:class_selected, player_result}}, socket) do
+    case player_result do
+      {:ok, player} ->
+        {:noreply, assign(socket, :player, player)}
+      {:error, message, player} ->
+        {:noreply,
+          socket
+          |> assign(:player, player)
+          |> put_flash(:error, message)
+        }
     end
-  end
-
-  @impl true
-  def handle_event("validate", %{"player" => %{"class_id" => class_id}}, socket) do
-    {
-      :noreply,
-      assign(socket, :class_selected, !is_nil(class_id))
-    }
-  end
-
-  # @impl true
-  # def handle_info({LiveArenaWeb.BossLive.FormComponent, {:saved, boss}}, socket) do
-  #   {:noreply, stream_insert(socket, :bosses, boss)}
-  # end
-
-  # @impl true
-  # def handle_event("delete", %{"id" => id}, socket) do
-  #   boss = NPC.get_boss!(id)
-  #   {:ok, _} = NPC.delete_boss(boss)
-
-  #   {:noreply, stream_delete(socket, :bosses, boss)}
-  # end
-
-  defp assign_form(socket, %Ecto.Changeset{} = changeset) do
-    assign(socket, :form, to_form(changeset))
   end
 end

@@ -1,16 +1,7 @@
 <%= if is_nil(@player.class_id) do %>
-    <.form for={@form} class="vh-100 flex flex-col" phx-submit="save" phx-change="validate">
-        <div class="grid grid-cols-2 h-4/5">
-            <.input type="image-radio" options={@class_opts} field={@form[:class_id]} />
-        </div>
-        <div class="dialogue-box h-1/5 flex">
-            <div class="m-auto">
-                <%= if @class_selected do %>
-                    <.button phx-disable-with="Saving...">Save Class</.button>
-                <% else %>
-                    <h2 class="text-center text-2xl sm:text-4xl">Select a Class</h2>
-                <% end %>
-            </div>
-        </div> 
-    </.form>
+    <.live_component
+        id={:select_class}
+        module={LiveArenaWeb.GameLive.ClassSelect}
+        player={@player}
+    />
 <% end %>

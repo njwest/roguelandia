@@ -230,7 +230,7 @@ defmodule LiveArena.Pawn do
         })
       |> Repo.update()
     else
-      {:error, "Player already has a class."}
+      {:error, "Player already has a class.", player}
     end
   end
 end
