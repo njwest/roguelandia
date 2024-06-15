@@ -34,8 +34,6 @@
 }
 
  .dialogue-box{
-    position: fixed;
-    bottom: 0;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.9);;
     border-radius: 10px;

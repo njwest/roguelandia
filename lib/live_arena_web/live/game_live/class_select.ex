@@ -7,12 +7,12 @@ defmodule LiveArenaWeb.GameLive.ClassSelect do
   @impl true
   def render(assigns) do
     ~H"""
-      <div class="flex vh-100">
-        <.form for={@form} class="vh-100 flex flex-col" phx-submit="save" phx-change="validate" phx-target={@myself}>
-            <div class="grid grid-cols-2 h-4/5">
+      <div class="vh-100 w-full">
+        <.form for={@form} class="flex flex-col" phx-submit="save" phx-change="validate" phx-target={@myself}>
+            <div class="grid grid-cols-2 flex-1">
                 <.input type="image-radio" options={@class_opts} field={@form[:class_id]} />
             </div>
-            <div class="dialogue-box h-1/5 flex">
+            <div class="dialogue-box flex-grow">
                 <div class="m-auto">
                     <%= if @class_selected do %>
                         <.button phx-disable-with="Saving...">Save Class</.button>
@@ -40,10 +40,19 @@ defmodule LiveArenaWeb.GameLive.ClassSelect do
   end
 
   @impl true
-  def handle_event("validate", %{"player" => %{"class_id" => class_id}}, socket) do
+  def handle_event("validate", %{"player" => player_params}, socket) do
+    changeset =
+      %Player{}
+      |> Player.changeset(player_params)
+      |> Map.put(:action, :validate)
+
+    class_selected = Map.has_key?(player_params, "class_id") && player_params["class_id"] != nil
+
     {
       :noreply,
-      assign(socket, :class_selected, !is_nil(class_id))
+      socket
+      |> assign(:class_selected, class_selected)
+      |> assign_form(changeset)
     }
   end
 
