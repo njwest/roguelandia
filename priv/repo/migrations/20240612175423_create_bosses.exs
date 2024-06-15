@@ -1,4 +1,4 @@
-defmodule LiveArena.Repo.Migrations.CreateBosses do
+defmodule Roguelandia.Repo.Migrations.CreateBosses do
   use Ecto.Migration
 
   def change do

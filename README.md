@@ -1,4 +1,4 @@
-# LiveArena
+# Roguelandia
 
 To start your Phoenix server:
 

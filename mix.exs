@@ -1,9 +1,9 @@
-defmodule LiveArena.MixProject do
+defmodule Roguelandia.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :live_arena,
+      app: :roguelandia,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule LiveArena.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {LiveArena.Application, []},
+      mod: {Roguelandia.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -75,10 +75,10 @@ defmodule LiveArena.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind live_arena", "esbuild live_arena"],
+      "assets.build": ["tailwind roguelandia", "esbuild roguelandia"],
       "assets.deploy": [
-        "tailwind live_arena --minify",
-        "esbuild live_arena --minify",
+        "tailwind roguelandia --minify",
+        "esbuild roguelandia --minify",
         "phx.digest"
       ]
     ]

@@ -1,0 +1,46 @@
+<.header>
+  Listing Bosses
+  <:actions>
+    <.link patch={~p"/bosses/new"}>
+      <.button>New Boss</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="bosses"
+  rows={@streams.bosses}
+  row_click={fn {_id, boss} -> JS.navigate(~p"/bosses/#{boss}") end}
+>
+  <:col :let={{_id, boss}} label="Name"><%= boss.name %></:col>
+  <:col :let={{_id, boss}} label="Hp"><%= boss.hp %></:col>
+  <:col :let={{_id, boss}} label="Strength"><%= boss.strength %></:col>
+  <:col :let={{_id, boss}} label="Attack"><%= boss.attack %></:col>
+  <:col :let={{_id, boss}} label="Special"><%= boss.special %></:col>
+  <:col :let={{_id, boss}} label="Avatar url"><%= boss.avatar_url %></:col>
+  <:action :let={{_id, boss}}>
+    <div class="sr-only">
+      <.link navigate={~p"/bosses/#{boss}"}>Show</.link>
+    </div>
+    <.link patch={~p"/bosses/#{boss}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, boss}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: boss.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="boss-modal" show on_cancel={JS.patch(~p"/bosses")}>
+  <.live_component
+    module={RoguelandiaWeb.BossLive.FormComponent}
+    id={@boss.id || :new}
+    title={@page_title}
+    action={@live_action}
+    boss={@boss}
+    patch={~p"/bosses"}
+  />
+</.modal>

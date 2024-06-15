@@ -7,19 +7,19 @@
 # General application configuration
 import Config
 
-config :live_arena,
-  ecto_repos: [LiveArena.Repo],
+config :roguelandia,
+  ecto_repos: [Roguelandia.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
-config :live_arena, LiveArenaWeb.Endpoint,
+config :roguelandia, RoguelandiaWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [html: LiveArenaWeb.ErrorHTML, json: LiveArenaWeb.ErrorJSON],
+    formats: [html: RoguelandiaWeb.ErrorHTML, json: RoguelandiaWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: LiveArena.PubSub,
+  pubsub_server: Roguelandia.PubSub,
   live_view: [signing_salt: "JWU8QrzZ"]
 
 # Configures the mailer
@@ -29,12 +29,12 @@ config :live_arena, LiveArenaWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :live_arena, LiveArena.Mailer, adapter: Swoosh.Adapters.Local
+config :roguelandia, Roguelandia.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",
-  live_arena: [
+  roguelandia: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
@@ -44,7 +44,7 @@ config :esbuild,
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "3.4.0",
-  live_arena: [
+  roguelandia: [
     args: ~w(
       --config=tailwind.config.js
       --input=css/app.css

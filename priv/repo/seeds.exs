@@ -5,12 +5,12 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-#     LiveArena.Repo.insert!(%LiveArena.SomeSchema{})
+#     Roguelandia.Repo.insert!(%Roguelandia.SomeSchema{})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-alias LiveArena.Pawn
+alias Roguelandia.Pawn
 
 classes = [
   %{"active_limit" => 16, "name" => "Warrior", "hp" => 50, "strength" => 8, "attack" => "Slash", "special" => "Frenzy", "avatar_url" => "/images/rogue-warrior.png"},

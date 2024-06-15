@@ -1,4 +1,4 @@
-defmodule LiveArena.Repo.Migrations.CreatePlayers do
+defmodule Roguelandia.Repo.Migrations.CreatePlayers do
   use Ecto.Migration
 
   def change do

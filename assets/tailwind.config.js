@@ -8,8 +8,8 @@ const path = require("path")
 module.exports = {
   content: [
     "./js/**/*.js",
-    "../lib/live_arena_web.ex",
-    "../lib/live_arena_web/**/*.*ex"
+    "../lib/roguelandia_web.ex",
+    "../lib/roguelandia_web/**/*.*ex"
   ],
   theme: {
     extend: {

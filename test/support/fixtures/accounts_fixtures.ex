@@ -1,7 +1,7 @@
-defmodule LiveArena.AccountsFixtures do
+defmodule Roguelandia.AccountsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `LiveArena.Accounts` context.
+  entities via the `Roguelandia.Accounts` context.
   """
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
@@ -18,7 +18,7 @@ defmodule LiveArena.AccountsFixtures do
     {:ok, user} =
       attrs
       |> valid_user_attributes()
-      |> LiveArena.Accounts.register_user()
+      |> Roguelandia.Accounts.register_user()
 
     user
   end
@@ -42,7 +42,7 @@ defmodule LiveArena.AccountsFixtures do
         special: "some special",
         strength: 42
       })
-      |> LiveArena.Accounts.create_player()
+      |> Roguelandia.Accounts.create_player()
 
     player
   end

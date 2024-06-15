@@ -1,7 +1,0 @@
-<%= if is_nil(@player.class_id) do %>
-    <.live_component
-        id={:select_class}
-        module={LiveArenaWeb.GameLive.ClassSelect}
-        player={@player}
-    />
-<% end %>

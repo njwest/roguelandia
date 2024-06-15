@@ -1,7 +1,7 @@
-defmodule LiveArena.NPCFixtures do
+defmodule Roguelandia.NPCFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `LiveArena.NPC` context.
+  entities via the `Roguelandia.NPC` context.
   """
 
   @doc """
@@ -18,7 +18,7 @@ defmodule LiveArena.NPCFixtures do
         special: "some special",
         strength: 42
       })
-      |> LiveArena.NPC.create_boss()
+      |> Roguelandia.NPC.create_boss()
 
     boss
   end

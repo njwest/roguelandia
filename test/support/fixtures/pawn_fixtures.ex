@@ -1,7 +1,7 @@
-defmodule LiveArena.PawnFixtures do
+defmodule Roguelandia.PawnFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `LiveArena.Pawn` context.
+  entities via the `Roguelandia.Pawn` context.
   """
 
   @doc """
@@ -18,7 +18,7 @@ defmodule LiveArena.PawnFixtures do
         name: "some name",
         strength: 42
       })
-      |> LiveArena.Pawn.create_class()
+      |> Roguelandia.Pawn.create_class()
 
     class
   end
