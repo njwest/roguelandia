@@ -68,7 +68,7 @@ defmodule Roguelandia.Accounts.UserToken do
             ORDER BY p.id DESC
             LIMIT 1
           )
-          """, user.id),
+          """, user.id), on: true,
         where: token.inserted_at > ago(@session_validity_in_days, "day"),
         select: %{
           id: user.id,
