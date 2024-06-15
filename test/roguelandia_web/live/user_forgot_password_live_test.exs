@@ -52,7 +52,7 @@ defmodule RoguelandiaWeb.UserForgotPasswordLiveTest do
 
       {:ok, conn} =
         lv
-        |> form("#reset_password_form", user: %{"email" => "unknown@example.com"})
+        |> form("#reset_password_form", user: %{"email" => "unknown@roguelandia.com"})
         |> render_submit()
         |> follow_redirect(conn, "/")
 

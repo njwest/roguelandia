@@ -8,7 +8,7 @@ defmodule Roguelandia.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"Roguelandia", "contact@example.com"})
+      |> from({"Roguelandia", "contact@roguelandia.com"})
       |> subject(subject)
       |> text_body(body)
 

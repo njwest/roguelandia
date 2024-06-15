@@ -54,7 +54,7 @@ defmodule RoguelandiaWeb.UserConfirmationInstructionsLiveTest do
 
       {:ok, conn} =
         lv
-        |> form("#resend_confirmation_form", user: %{email: "unknown@example.com"})
+        |> form("#resend_confirmation_form", user: %{email: "unknown@roguelandia.com"})
         |> render_submit()
         |> follow_redirect(conn, ~p"/")
 

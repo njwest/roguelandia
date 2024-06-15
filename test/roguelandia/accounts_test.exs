@@ -8,7 +8,7 @@ defmodule Roguelandia.AccountsTest do
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
-      refute Accounts.get_user_by_email("unknown@example.com")
+      refute Accounts.get_user_by_email("unknown@roguelandia.com")
     end
 
     test "returns the user if the email exists" do
@@ -19,7 +19,7 @@ defmodule Roguelandia.AccountsTest do
 
   describe "get_user_by_email_and_password/2" do
     test "does not return the user if the email does not exist" do
-      refute Accounts.get_user_by_email_and_password("unknown@example.com", "hello world!")
+      refute Accounts.get_user_by_email_and_password("unknown@roguelandia.com", "hello world!")
     end
 
     test "does not return the user if the password is not valid" do
@@ -182,14 +182,14 @@ defmodule Roguelandia.AccountsTest do
     test "sends token through notification", %{user: user} do
       token =
         extract_user_token(fn url ->
-          Accounts.deliver_user_update_email_instructions(user, "current@example.com", url)
+          Accounts.deliver_user_update_email_instructions(user, "current@roguelandia.com", url)
         end)
 
       {:ok, token} = Base.url_decode64(token, padding: false)
       assert user_token = Repo.get_by(UserToken, token: :crypto.hash(:sha256, token))
       assert user_token.user_id == user.id
       assert user_token.sent_to == user.email
-      assert user_token.context == "change:current@example.com"
+      assert user_token.context == "change:current@roguelandia.com"
     end
   end
 
@@ -223,7 +223,7 @@ defmodule Roguelandia.AccountsTest do
     end
 
     test "does not update email if user email changed", %{user: user, token: token} do
-      assert Accounts.update_user_email(%{user | email: "current@example.com"}, token) == :error
+      assert Accounts.update_user_email(%{user | email: "current@roguelandia.com"}, token) == :error
       assert Repo.get!(User, user.id).email == user.email
       assert Repo.get_by(UserToken, user_id: user.id)
     end

@@ -53,10 +53,10 @@ defmodule Roguelandia.Accounts do
 
   ## Examples
 
-      iex> get_user_by_email("foo@example.com")
+      iex> get_user_by_email("foo@roguelandia.com")
       %User{}
 
-      iex> get_user_by_email("unknown@example.com")
+      iex> get_user_by_email("unknown@roguelandia.com")
       nil
 
   """
@@ -69,10 +69,10 @@ defmodule Roguelandia.Accounts do
 
   ## Examples
 
-      iex> get_user_by_email_and_password("foo@example.com", "correct_password")
+      iex> get_user_by_email_and_password("foo@roguelandia.com", "correct_password")
       %User{}
 
-      iex> get_user_by_email_and_password("foo@example.com", "invalid_password")
+      iex> get_user_by_email_and_password("foo@roguelandia.com", "invalid_password")
       nil
 
   """

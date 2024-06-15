@@ -11,9 +11,11 @@ config :roguelandia,
   ecto_repos: [Roguelandia.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+host = System.get_env("PHX_HOST") || "localhost"
+
 # Configures the endpoint
 config :roguelandia, RoguelandiaWeb.Endpoint,
-  url: [host: "localhost"],
+  url: [host: host],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
     formats: [html: RoguelandiaWeb.ErrorHTML, json: RoguelandiaWeb.ErrorJSON],
