@@ -60,7 +60,7 @@ defmodule LiveArenaWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
     live_session :require_authenticated_user,
       on_mount: [{LiveArenaWeb.UserAuth, :ensure_authenticated}] do
-      live "/home", PlayerLive, :home
+      live "/game", GameLive, :game
 
       live "/users/settings", UserLive.UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserLive.UserSettingsLive, :confirm_email

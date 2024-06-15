@@ -1,6 +1,7 @@
 defmodule LiveArena.Accounts.UserToken do
   use Ecto.Schema
   import Ecto.Query
+  alias LiveArena.Pawn.Player
   alias LiveArena.Accounts.UserToken
 
   @hash_algorithm :sha256
@@ -58,9 +59,40 @@ defmodule LiveArena.Accounts.UserToken do
     query =
       from token in by_token_and_context_query(token_val, "session"),
         join: user in assoc(token, :user),
-        join: player in assoc(user, :player),
+        join: player in fragment(
+          """
+          LATERAL (
+            SELECT p.id, p.name, p.level, p.experience, p.special, p.hp, p.strength, p.attack, p.avatar_url, p.user_id, p.class_id, p.inserted_at, p.updated_at
+            FROM players p
+            WHERE p.user_id = ?
+            ORDER BY p.id DESC
+            LIMIT 1
+          )
+          """, user.id),
         where: token.inserted_at > ago(@session_validity_in_days, "day"),
-        select: %{user | player: player}
+        select: %{
+          id: user.id,
+          email: user.email,
+          hashed_password: user.hashed_password,
+          confirmed_at: user.confirmed_at,
+          inserted_at: user.inserted_at,
+          updated_at: user.updated_at,
+          player: %{
+            id: player.id,
+            name: player.name,
+            level: player.level,
+            experience: player.experience,
+            special: player.special,
+            hp: player.hp,
+            strength: player.strength,
+            attack: player.attack,
+            avatar_url: player.avatar_url,
+            user_id: player.user_id,
+            class_id: player.class_id,
+            inserted_at: player.inserted_at,
+            updated_at: player.updated_at
+          }
+        }
 
     {:ok, query}
   end

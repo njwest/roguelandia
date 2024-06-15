@@ -12,7 +12,7 @@ defmodule LiveArena.Accounts.User do
     field :current_password, :string, virtual: true, redact: true
     field :name, :string, virtual: true
     field :confirmed_at, :naive_datetime
-    has_one :player, Player
+    has_many :players, Player
 
     timestamps(type: :utc_datetime)
   end
