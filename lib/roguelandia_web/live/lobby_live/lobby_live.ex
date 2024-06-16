@@ -13,12 +13,9 @@ defmodule RoguelandiaWeb.LobbyLive do
 
     socket =
       if connected?(socket) do
-        Presence.track_player(player.id, %{id: player.id, name: player.name})
+        Presence.track_player(player.id, %{id: player.id, name: player.name, level: player.level})
         Presence.subscribe()
-
-        game_id = 1
-        {:ok, pid} = GameManager.find_or_create_game_server(game_id)
-        GameServer.add_player(pid, player)
+        Phoenix.PubSub.subscribe(Roguelandia.PubSub, "player:#{player.id}")
 
         stream(socket, :presences, Presence.list_online_players())
       else

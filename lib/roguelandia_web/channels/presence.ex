@@ -15,7 +15,7 @@ defmodule RoguelandiaWeb.Presence do
 
   def fetch(_topic, presences) do
     for {player_id, %{metas: [meta | metas]}} <- presences, into: %{} do
-      {player_id, %{metas: [meta | metas], id: meta.id, name: meta.name, dom_id: "presence_#{meta.id}"}}
+      {player_id, %{metas: [meta | metas], id: meta.id, name: meta.name, level: meta.level, dom_id: "presence_#{meta.id}"}}
     end
   end
 

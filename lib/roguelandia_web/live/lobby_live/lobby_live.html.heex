@@ -5,11 +5,13 @@
         player={@player}
     />
 <% else %>
-    <ul id="online_users" phx-update="stream">
-        <%= for {dom_id, presence} <- @streams.presences do %>
-            <li id={dom_id}>
-                <%= presence.name %> (<%= length(presence.metas) %>)
-            </li>
-        <% end %>
-    </ul>
+    <.centered_dialogue id="lobby">
+        <ul id="online_users" phx-update="stream" class="m-auto">
+            <%= for {dom_id, player} <- @streams.presences do %>
+                <button :if={@player.id != player.id} id={dom_id}>
+                    <%= player.name %>, Level <%= player.level %>
+                </button>
+            <% end %>
+        </ul>
+    </.centered_dialogue>
 <% end %>
