@@ -14,38 +14,39 @@ defmodule RoguelandiaWeb.Presence do
   end
 
   def fetch(_topic, presences) do
-    for {key, %{metas: [meta | metas]}} <- presences, into: %{} do
-      # user can be populated here from the database here we populate
-      # the name for demonstration purposes
-      {key, %{metas: [meta | metas], id: meta.id, user: %{name: meta.id}}}
+    for {player_id, %{metas: [meta | metas]}} <- presences, into: %{} do
+      {player_id, %{metas: [meta | metas], id: meta.id, name: meta.name, dom_id: "presence_#{meta.id}"}}
     end
   end
 
   def handle_metas(topic, %{joins: joins, leaves: leaves}, presences, state) do
-    for {user_id, presence} <- joins do
-      user_data = %{id: user_id, user: presence.user, metas: Map.fetch!(presences, user_id)}
-      msg = {__MODULE__, {:join, user_data}}
+    for {player_id, presence} <- joins do
+      player_data = %{presence | metas: Map.fetch!(presences, player_id)}
+      msg = {__MODULE__, {:join, player_data}}
       Phoenix.PubSub.local_broadcast(Roguelandia.PubSub, "proxy:#{topic}", msg)
     end
 
-    for {user_id, presence} <- leaves do
+    for {player_id, presence} <- leaves do
       metas =
-        case Map.fetch(presences, user_id) do
+        case Map.fetch(presences, player_id) do
           {:ok, presence_metas} -> presence_metas
           :error -> []
         end
 
-      user_data = %{id: user_id, user: presence.user, metas: metas}
-      msg = {__MODULE__, {:leave, user_data}}
+      player_data = %{presence | metas: metas}
+      msg = {__MODULE__, {:leave, player_data}}
       Phoenix.PubSub.local_broadcast(Roguelandia.PubSub, "proxy:#{topic}", msg)
     end
 
     {:ok, state}
   end
 
-  def list_online_users(), do: list("online_users") |> Enum.map(fn {_id, presence} -> presence end)
+  def list_online_players() do
+    list("online_players")
+    |> Enum.map(fn {_id, presence} -> presence
+    end)
+  end
+  def track_player(player_id, params), do: track(self(), "online_players", player_id, params)
 
-  def track_user(name, params), do: track(self(), "online_users", name, params)
-
-  def subscribe(), do: Phoenix.PubSub.subscribe(Roguelandia.PubSub, "proxy:online_users")
+  def subscribe(), do: Phoenix.PubSub.subscribe(Roguelandia.PubSub, "proxy:online_players")
 end

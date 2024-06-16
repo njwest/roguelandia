@@ -1,4 +1,4 @@
-defmodule RoguelandiaWeb.GameLive.ClassSelect do
+defmodule RoguelandiaWeb.LobbyLive.ClassSelect do
   use RoguelandiaWeb, :live_component
 
   alias Roguelandia.Pawn

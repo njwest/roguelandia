@@ -1,0 +1,15 @@
+<%= if is_nil(@player.class_id) do %>
+    <.live_component
+        id={:select_class}
+        module={RoguelandiaWeb.LobbyLive.ClassSelect}
+        player={@player}
+    />
+<% else %>
+    <ul id="online_users" phx-update="stream">
+        <%= for {dom_id, presence} <- @streams.presences do %>
+            <li id={dom_id}>
+                <%= presence.name %> (<%= length(presence.metas) %>)
+            </li>
+        <% end %>
+    </ul>
+<% end %>

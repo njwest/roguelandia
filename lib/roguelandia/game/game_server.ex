@@ -56,11 +56,13 @@ defmodule Roguelandia.GameServer do
 
   @impl true
   def handle_cast({:add_player, player}, state) do
+    # IO.inspect("in genserver: #{inspect(player)}")
     {:noreply, %{state | players: [player | state.players]}}
   end
 
   @impl true
   def handle_cast({:presence_diff, diff}, state) do
+    # IO.inspect("GenServer presence diff")
     new_players = update_players_from_diff(state.players, diff)
     {:noreply, %{state | players: new_players}}
   end

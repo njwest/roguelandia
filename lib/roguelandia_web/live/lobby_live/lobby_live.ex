@@ -1,4 +1,4 @@
-defmodule RoguelandiaWeb.GameLive do
+defmodule RoguelandiaWeb.LobbyLive do
   use RoguelandiaWeb, :live_view
 
   alias Roguelandia.{GameServer, GameManager}
@@ -6,27 +6,26 @@ defmodule RoguelandiaWeb.GameLive do
 
   @impl true
   def mount(_params, _session, %{assigns: %{current_user: %{player: player}}} = socket) do
-    socket = stream(socket, :presences, [])
+    socket =
+      socket
+      |> stream(:presences, [])
+      |> assign(:player, player)
 
     socket =
       if connected?(socket) do
-        Presence.track_user(player.name, %{id: player.name})
+        Presence.track_player(player.id, %{id: player.id, name: player.name})
         Presence.subscribe()
 
         game_id = 1
         {:ok, pid} = GameManager.find_or_create_game_server(game_id)
         GameServer.add_player(pid, player)
 
-        stream(socket, :presences, Presence.list_online_users())
+        stream(socket, :presences, Presence.list_online_players())
       else
         socket
       end
 
-    {
-      :ok,
-      socket
-      |> assign(:player, player)
-    }
+    {:ok, socket}
   end
 
   @impl true

@@ -60,7 +60,7 @@ defmodule RoguelandiaWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
     live_session :require_authenticated_user,
       on_mount: [{RoguelandiaWeb.UserAuth, :ensure_authenticated}] do
-      live "/game", GameLive, :game
+      live "/lobby", LobbyLive, :lobby
 
       live "/users/settings", UserLive.UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserLive.UserSettingsLive, :confirm_email
