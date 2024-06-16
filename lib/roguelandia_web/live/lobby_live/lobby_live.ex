@@ -1,8 +1,9 @@
 defmodule RoguelandiaWeb.LobbyLive do
+
   use RoguelandiaWeb, :live_view
 
-  alias Roguelandia.{GameServer, GameManager}
   alias RoguelandiaWeb.Presence
+  alias Roguelandia.Game
 
   @impl true
   def mount(_params, _session, %{assigns: %{current_user: %{player: player}}} = socket) do
@@ -36,7 +37,7 @@ defmodule RoguelandiaWeb.LobbyLive do
   end
 
   @impl true
-  def handle_info({RoguelandiaWeb.GameLive.ClassSelect, {:class_selected, player_result}}, socket) do
+  def handle_info({RoguelandiaWeb.LobbyLive.ClassSelect, {:class_selected, player_result}}, socket) do
     case player_result do
       {:ok, player} ->
         {:noreply, assign(socket, :player, player)}
@@ -58,6 +59,33 @@ defmodule RoguelandiaWeb.LobbyLive do
       {:noreply, stream_delete(socket, :presences, presence)}
     else
       {:noreply, stream_insert(socket, :presences, presence)}
+    end
+  end
+
+  # def handle_info({:challenge, player_id}, %{player: %{id: player_id}} = socket) do
+  #   IO.inspect(player_id)
+  #   # Phoenix.PubSub.broadcast(Roguelandia.PubSub, "player:#{player_id}", {:challenge, socket.assigns.player.id})
+  #   case Game.find_or_create_empty_player_battle(player_id) do
+  #     {:has_battle, battle_id} ->
+  #       {:noreply, push_redirect(socket, to: ~p"/battles/#{battle_id}")}
+  #     {:ok, battle} ->
+  #       IO.inspect(battle)
+  #       IO.inspect("Send player challenge")
+  #       {:noreply, socket}
+  #   end
+
+  #   {:noreply, socket}
+  # end
+
+  @impl true
+  def handle_event("challenge", %{"player_id" => challenged_player_id}, %{assigns: %{player: %{id: player_id}}} = socket) do
+    case Game.find_or_create_empty_player_battle(player_id) do
+      {:has_battle, battle_id} ->
+        {:noreply, push_redirect(socket, to: ~p"/battles/#{battle_id}")}
+      {:ok, battle} ->
+        IO.inspect(battle)
+        IO.inspect("Send player challenge")
+        {:noreply, socket}
     end
   end
 end

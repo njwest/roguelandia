@@ -77,3 +77,11 @@ input[type="radio"]:checked + .radio-label {
 input[type="radio"]:checked + .radio-label img {
     @apply grayscale-0;
 }
+
+.self-button{
+    @apply sm:text-2xl px-4 flex items-center justify-center border-4 border-cyan-400 border-dotted w-full select-none;
+}
+
+.inactive-button{
+    @apply sm:text-2xl px-4 flex items-center justify-center border-4 border-brand border-dashed w-full select-none;
+}

@@ -6,10 +6,25 @@
     />
 <% else %>
     <.centered_dialogue id="lobby">
-        <ul id="online_users" phx-update="stream" class="m-auto">
+        <.header class="text-center">
+            Lobby
+            <:subtitle>
+                Challenge a Player
+            </:subtitle>
+        </.header>
+        
+        <ul id="online_players" phx-update="stream" class="m-auto space-y-2">
             <%= for {dom_id, player} <- @streams.presences do %>
-                <button :if={@player.id != player.id} id={dom_id}>
+                <button :if={@player.id != player.id and not is_nil(player.level)} id={dom_id} class="sm:text-2xl px-4 flex items-center justify-center border-4 border-brand hover:bg-brand w-full" type="button" phx-click="challenge" phx-value-player_id={player.id}>
                     <%= player.name %>, Level <%= player.level %>
+                </button>
+
+                <button :if={@player.id != player.id and is_nil(player.level)} id={dom_id} class="inactive-button" type="button" disabled>
+                    <%= player.name %> (Selecting a Class)
+                </button>
+
+                <button id={dom_id} :if={@player.id == player.id} class="self-button" type="button" disabled>
+                    <%= player.name %>, Level <%= player.level %> (You)
                 </button>
             <% end %>
         </ul>

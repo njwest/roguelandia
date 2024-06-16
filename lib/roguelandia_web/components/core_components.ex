@@ -468,7 +468,7 @@ defmodule RoguelandiaWeb.CoreComponents do
         <h1 class="text-xl sm:text-4xl leading-8 select-none">
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="sm:text-lg mt-2 leading-6 select-none">
+        <p :if={@subtitle != []} class="text-lg sm:text-2xl mt-2 leading-6 select-none">
           <%= render_slot(@subtitle) %>
         </p>
       </div>

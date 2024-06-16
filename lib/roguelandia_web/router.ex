@@ -62,6 +62,8 @@ defmodule RoguelandiaWeb.Router do
       on_mount: [{RoguelandiaWeb.UserAuth, :ensure_authenticated}] do
       live "/lobby", LobbyLive, :lobby
 
+      live "/battles/:battle_id", BattleLive, :battle
+
       live "/users/settings", UserLive.UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserLive.UserSettingsLive, :confirm_email
 

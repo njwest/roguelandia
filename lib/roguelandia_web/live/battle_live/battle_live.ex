@@ -1,4 +1,4 @@
-defmodule RoguelandiaWeb.GameLive do
+defmodule RoguelandiaWeb.BattleLive do
   use RoguelandiaWeb, :live_view
 
   alias Roguelandia.{GameServer, GameManager}
@@ -13,10 +13,11 @@ defmodule RoguelandiaWeb.GameLive do
   end
 
   @impl true
-  def handle_params(%{"game_id" => game_id}, _, socket) do
+  def handle_params(%{"battle_id" => battle_id}, _, socket) do
     socket =
       if connected?(socket) do
-        {:ok, pid} = GameManager.find_or_create_game_server(game_id)
+        {:ok, pid} = GameManager.find_or_create_game_server("battle:#{battle_id}")
+
         GameServer.add_player(pid, socket.assigns.player)
       else
         socket
