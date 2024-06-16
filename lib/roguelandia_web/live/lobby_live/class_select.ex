@@ -64,16 +64,12 @@ defmodule RoguelandiaWeb.LobbyLive.ClassSelect do
     case Pawn.set_player_class(socket.assigns.player.id, String.to_integer(class_id)) do
       {:error, message} ->
         {:noreply, put_flash(socket, :error, message)}
-      player_result ->
-        notify_parent({:class_selected, player_result})
-
-        {:noreply, socket}
+      {:ok, _player_result} ->
+        {:noreply, push_navigate(socket, to: ~p"/lobby")}
     end
   end
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
     assign(socket, :form, to_form(changeset))
   end
-
-  defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
 end

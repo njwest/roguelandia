@@ -7,9 +7,7 @@ defmodule Roguelandia.Game do
   alias Roguelandia.Pawn.Player
   alias Roguelandia.Repo
 
-  alias Roguelandia.Game.Battle
-
-
+  alias Roguelandia.Game.{Battle, BattlePlayer}
 
   def find_or_create_empty_player_battle(player_id) do
     # If the player has an active battle, send them the active battle ID
@@ -145,7 +143,7 @@ defmodule Roguelandia.Game do
     Battle.changeset(battle, attrs)
   end
 
-  alias Roguelandia.Game.BattlePlayer
+  # alias Roguelandia.Game.BattlePlayer
 
   @doc """
   Returns the list of battle_players.

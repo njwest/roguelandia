@@ -36,19 +36,19 @@ defmodule RoguelandiaWeb.LobbyLive do
     |> assign(:page_title, "Home")
   end
 
-  @impl true
-  def handle_info({RoguelandiaWeb.LobbyLive.ClassSelect, {:class_selected, player_result}}, socket) do
-    case player_result do
-      {:ok, player} ->
-        {:noreply, assign(socket, :player, player)}
-      {:error, message, player} ->
-        {:noreply,
-          socket
-          |> assign(:player, player)
-          |> put_flash(:error, message)
-        }
-    end
-  end
+  # @impl true
+  # def handle_info({RoguelandiaWeb.LobbyLive.ClassSelect, {:class_selected, player_result}}, socket) do
+  #   case player_result do
+  #     {:ok, player} ->
+  #       {:noreply, assign(socket, :player, player)}
+  #     {:error, message, player} ->
+  #       {:noreply,
+  #         socket
+  #         |> assign(:player, player)
+  #         |> put_flash(:error, message)
+  #       }
+  #   end
+  # end
 
   def handle_info({RoguelandiaWeb.Presence, {:join, presence}}, socket) do
     {:noreply, stream_insert(socket, :presences, presence)}
@@ -86,6 +86,13 @@ defmodule RoguelandiaWeb.LobbyLive do
         IO.inspect(battle)
         IO.inspect("Send player challenge")
         {:noreply, socket}
+    end
+  end
+
+  defp stream_length(stream) do
+    case Enum.take(@streams.presences, 2) do
+      [something] -> IO.inspect("what")
+      something_else -> IO.inspect(something_else)
     end
   end
 end

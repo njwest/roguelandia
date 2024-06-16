@@ -6,6 +6,7 @@ defmodule Roguelandia.Game.Battle do
   alias Roguelandia.Pawn.Player
 
   schema "battles" do
+    field :active, :boolean
     belongs_to :creator, Player, foreign_key: :creator_id
     many_to_many :participants, Player, join_through: "battle_players"
     has_many :battle_players, BattlePlayer
