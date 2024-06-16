@@ -43,7 +43,7 @@ defmodule RoguelandiaWeb.Router do
 
   scope "/", RoguelandiaWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
-    get "/", PageController, :home
+    live "/", UserLive.UserLoginLive, :new
 
     live_session :redirect_if_user_is_authenticated,
       on_mount: [{RoguelandiaWeb.UserAuth, :redirect_if_user_is_authenticated}] do

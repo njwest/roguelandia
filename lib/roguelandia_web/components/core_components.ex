@@ -244,7 +244,7 @@ defmodule RoguelandiaWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 bg-brand text-white hover:bg-opacity-90 py-2 px-3 text-lg sm:text-4xl bg-brand",
+        "phx-submit-loading:opacity-75 bg-brand text-white hover:bg-opacity-90 py-2 px-3 text-lg sm:text-2xl bg-brand dialogue-border",
         "font-semibold leading-6 active:text-white/80",
         @class
       ]}

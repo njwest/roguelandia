@@ -4,4 +4,8 @@
         module={RoguelandiaWeb.GameLive.ClassSelect}
         player={@player}
     />
+<% else %>
+    <ul id="online_users" phx-update="stream">
+      <li :for={{dom_id, %{id: id, metas: metas}} <- @streams.presences} id={dom_id}><%= id %> (<%= length(metas) %>)</li>
+    </ul>
 <% end %>

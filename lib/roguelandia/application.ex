@@ -18,6 +18,7 @@ defmodule Roguelandia.Application do
       # {Roguelandia.Worker, arg},
       # Start to serve requests, typically the last entry
       RoguelandiaWeb.Endpoint,
+      RoguelandiaWeb.Presence,
       # Start a dynamic supervisor for game servers
       {DynamicSupervisor, strategy: :one_for_one, name: GameSupervisor},
       # Start a registry for game servers
