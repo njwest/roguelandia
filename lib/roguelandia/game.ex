@@ -20,13 +20,18 @@ defmodule Roguelandia.Game do
       %{active: true} ->
         {:error, "Too late, challenger is battling someone else."}
       battle ->
-        Multi.new()
-        |> Multi.insert(:battle_player, %BattlePlayer{battle_id: battle_id, player_id: player_id})
-        |> Multi.update(:battle, Battle.changeset(battle, %{active: true}))
-        |> Repo.transaction()
-        |> case do
-          {:ok, _result} -> {:ok, battle}
-          {:error, _failed_operation, changeset, _changes_so_far} -> {:error, changeset}
+        case find_active_player_battle(battle.creator_id) do
+          nil ->
+            Multi.new()
+            |> Multi.insert(:battle_player, %BattlePlayer{battle_id: battle_id, player_id: player_id})
+            |> Multi.update(:battle, Battle.changeset(battle, %{active: true}))
+            |> Repo.transaction()
+            |> case do
+              {:ok, _result} -> {:ok, battle}
+              {:error, _failed_operation, changeset, _changes_so_far} -> {:error, changeset}
+            end
+          _battle ->
+            {:error, "Too late, challenger is battling someone else."}
         end
     end
   end
