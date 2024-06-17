@@ -221,6 +221,7 @@ defmodule Roguelandia.Pawn do
       |> Player.changeset(%{
           class_id: class_id,
           hp: class.hp,
+          max_hp: class.hp,
           strength: class.strength,
           attack: class.attack,
           special: class.special,

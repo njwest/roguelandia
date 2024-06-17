@@ -4,8 +4,8 @@ defmodule RoguelandiaWeb.BattleLive do
   alias Roguelandia.{Game, BattleServer, BattleManager}
 
   @impl true
-  def mount(_params, _session, %{assigns: %{current_user: %{player: player}}} = socket) do
-    case Game.find_active_player_battle(player.id) do
+  def mount(_params, _session, %{assigns: %{current_user: %{player: %{id: player_id}}}} = socket) do
+    case Game.find_active_player_battle(player_id) do
       nil ->
         {:ok, push_navigate(socket, to: ~p"/lobby")}
       %{id: battle_id} = _battle ->
@@ -13,11 +13,25 @@ defmodule RoguelandiaWeb.BattleLive do
 
         battle = BattleServer.get_state(pid)
 
+        player = Enum.find(battle.participants, fn participant ->
+          participant.id == player_id
+        end)
+        IO.inspect(battle.participants, label: "Participants")
+
+        IO.inspect(player, label: "Player: ")
+        other_participants = Enum.filter(battle.participants, fn participant ->
+          participant.id != player_id
+        end)
+
+        opponent = hd(other_participants)
+
         {
           :ok,
           socket
           |> assign(:battle_pid, pid)
           |> assign(:battle, battle)
+          |> assign(:player, player)
+          |> assign(:opponent, opponent)
         }
     end
   end

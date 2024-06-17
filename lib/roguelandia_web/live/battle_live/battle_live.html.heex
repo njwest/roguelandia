@@ -1,26 +1,31 @@
 <div class="w-full h-full hud flex bg-class flex-col">
-    <div class="w-full h-[50%]">
+    <div class="w-full h-[50%] flex justify-end items-end">
         <%!-- opponent image --%>
-       
+       <img src={@opponent.avatar_url} class="h-full m-auto shadow-outline pointer-events-none select-none"/>
     </div>
         <%!-- health bar --%>
-    <div class="fixed w-full sm:w-[95%] z-40 mt-2 sm:mx-6 left-0">
+    <div class="fixed w-full sm:w-[95%] z-40 mt-2 sm:mx-6 left-0 bg-transparent">
         <div class="border-8 border-gray-200 border-double rounded-lg bg-black">
-            <div class={"h-10"} style={"width: #{}%"} />
+            <div class={"h-8 bg-brand"} style={"width: #{100 * (@player.max_hp / @player.hp)}%"} />
         </div>
         <div class="inline-block max-w-content">
-            <h3 class="text-outline text-lg sm:text-2xl text-white font-medium bg-black rounded-lg py-1 px-3">opponent name</h3>
+            <h3 class="text-outline text-lg sm:text-2xl text-white font-medium rounded-lg py-1 px-2">Your HP</h3>
+        </div>
+    </div>
+    <div class="w-full sm:w-[95%] z-40 sm:mx-6 mb-2">
+        <div class="border-8 border-gray-200 border-double rounded-lg bg-black">
+            <div class={"h-8 bg-brand"} style={"width: #{100 * (@opponent.max_hp / @opponent.hp)}%"} />
         </div>
     </div>
     <div class="dialogue-box h-[50%] text-white flex flex-col bg-none">
         <div class="-mt-[20px] ml-[10px] bg-transparent">
             <span class="text-lg sm:text-2xl md:text-4xl px-2 py-1 select-none bg-black rounded-md">
-            dialogue title
+            <%= "Battle against #{@opponent.name}" %>
             </span>
         </div>
         <div class="overflow-y-auto flex flex-col justify-between h-full">
-            <p id="dialogue-content" class="px-2 py-1 md:py-2 md:px-6 text-lg md:text-2xl lg:text-3xl text-white select-none whitespace-pre-wrap">
-            dialogue
+            <p class="px-2 py-1 md:py-2 md:px-6 text-xl md:text-3xl lg:text-3xl text-white select-none whitespace-pre-wrap">
+                Placeholder
             </p>
             <%!-- if player turn show --%>
             <ul class="flex flex-col mt-2 overflow-auto select-none">

@@ -12,6 +12,7 @@ defmodule Roguelandia.Pawn.Player do
     field :experience, :integer
     field :special, :string
     field :hp, :integer
+    field :max_hp, :integer
     field :strength, :integer
     field :attack, :string
     field :avatar_url, :string
@@ -26,7 +27,7 @@ defmodule Roguelandia.Pawn.Player do
   @doc false
   def changeset(player, attrs) do
     player
-    |> cast(attrs, [:user_id, :class_id, :name, :level, :experience, :hp, :strength, :attack, :special, :avatar_url])
+    |> cast(attrs, [:user_id, :class_id, :name, :level, :experience, :hp, :max_hp, :strength, :attack, :special, :avatar_url])
     |> validate_required([:user_id, :name])
     |> unique_constraint(:name)
   end
