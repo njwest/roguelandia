@@ -9,6 +9,7 @@ defmodule RoguelandiaWeb.BattleLive do
       :ok,
       socket
       |> assign(:player, player)
+      |> assign(:battle_pid, nil)
     }
   end
 
@@ -19,6 +20,8 @@ defmodule RoguelandiaWeb.BattleLive do
         {:ok, pid} = GameManager.find_or_create_game_server("battle:#{battle_id}")
 
         GameServer.add_player(pid, socket.assigns.player)
+
+        assign(socket, :battle_pid, pid)
       else
         socket
       end

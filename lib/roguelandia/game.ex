@@ -4,10 +4,32 @@ defmodule Roguelandia.Game do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Multi
+
   alias Roguelandia.Pawn.Player
   alias Roguelandia.Repo
 
   alias Roguelandia.Game.{Battle, BattlePlayer}
+
+
+  def accept_player_battle(battle_id, player_id) do
+    case Repo.get(Battle, battle_id) do
+      nil ->
+        {:error, "Battle not found"}
+
+      %{active: true} ->
+        {:error, "Too late, challenger is battling someone else."}
+      battle ->
+        Multi.new()
+        |> Multi.insert(:battle_player, %BattlePlayer{battle_id: battle_id, player_id: player_id})
+        |> Multi.update(:battle, Battle.changeset(battle, %{active: true}))
+        |> Repo.transaction()
+        |> case do
+          {:ok, _result} -> {:ok, battle}
+          {:error, _failed_operation, changeset, _changes_so_far} -> {:error, changeset}
+        end
+    end
+  end
 
   def find_or_create_empty_player_battle(player_id) do
     # If the player has an active battle, send them the active battle ID
@@ -17,7 +39,7 @@ defmodule Roguelandia.Game do
           nil ->
             create_battle(%{creator_id: player_id})
           battle ->
-            {:has_battle, battle.id}
+            {:ok, battle}
         end
       %{id: battle_id} ->
         {:has_battle, battle_id}

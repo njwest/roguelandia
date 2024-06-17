@@ -5,6 +5,7 @@
         player={@player}
     />
 <% else %>
+    
     <.centered_dialogue id="lobby">
         <.header class="text-center">
             Lobby
@@ -12,21 +13,37 @@
                 Challenge a Player
             </:subtitle>
         </.header>
-        
         <ul id="online_players" phx-update="stream" class="m-auto space-y-2">
             <%= for {dom_id, player} <- @streams.presences do %>
-                <button :if={@player.id != player.id and not is_nil(player.level)} id={dom_id} class="sm:text-2xl px-4 flex items-center justify-center border-4 border-brand hover:bg-brand w-full" type="button" phx-click="challenge" phx-value-player_id={player.id}>
+                <button :if={@player.id != player.id and not is_nil(player.level)} id={dom_id} class="sm:text-2xl px-4 flex items-center justify-center border-4 border-brand hover:bg-brand w-full" type="button" phx-click="challenge" phx-value-player_id={player.id} phx-throttle={6000}>
                     <%= player.name %>, Lvl <%= player.level %>
                 </button>
 
                 <button :if={@player.id != player.id and is_nil(player.level)} id={dom_id} class="inactive-button" type="button" disabled>
-                    <%= player.name %> - Selecting a Class
+                    <%= player.name %> is Selecting a Class
                 </button>
 
-                <button id={dom_id} :if={@player.id == player.id} class="self-button" type="button" disabled>
-                    <%= player.name %>, Lvl <%= player.level %> (You)
+                <button id={dom_id} :if={@player.id == player.id} class="self-button" type="button" disabled title="This is you.">
+                    <%= player.name %>, Lvl <%= player.level %>
                 </button>
             <% end %>
         </ul>
     </.centered_dialogue>
+    <.modal id={"challenge-modal-#{@challenge.challenger_name}"} :if={@challenge} show>
+        <div class="flex flex-col text-center max-w-sm">
+            <.header>
+                You've been challenged by <span class="inherit text-cyan-200"><%= @challenge.challenger_name %> (Lvl <%= @challenge.challenger_level %>)</span>!
+            </.header>
+            <div class="flex space-x-4 w-full mt-10">
+                <button type="button" phx-click="accept" class="border-4 border-brand hover:bg-brand px-3 sm:text-2xl grow" phx-value-battle_id={@challenge.battle_id} phx-throttle={8000}>
+                    Battle!
+                </button>
+                <button type="button" phx-click="decline" class="border-4 border-zinc-300 px-3 hover:bg-zinc-300 hover:text-brand sm:text-2xl grow" phx-value-battle_id={@challenge.battle_id} phx-throttle={8000}>
+                    Decline
+                </button>
+            </div>
+        </div>
+    </.modal>
+
+
 <% end %>
