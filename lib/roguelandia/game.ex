@@ -13,6 +13,14 @@ defmodule Roguelandia.Game do
   alias Roguelandia.Pawn.Player
   alias Roguelandia.Game.{Battle, BattlePlayer}
 
+  def find_battle_with_participants(battle_id) do
+    Repo.one(
+      from b in Battle,
+        where: b.id == ^battle_id,
+        preload: [:participants]
+    )
+  end
+
   def accept_player_challenge(%{battle_id: battle_id, challenger_id: challenger_id} = _challenge, player_id) do
     case Repo.get(Battle, battle_id) do
       nil ->

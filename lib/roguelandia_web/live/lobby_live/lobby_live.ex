@@ -15,9 +15,9 @@ defmodule RoguelandiaWeb.LobbyLive do
       |> assign(:challenge, nil)
 
     case Game.find_active_player_battle(player.id) do
-      %{id: battle_id} ->
+      %{id: _battle_id} ->
         # Player has a battle, kick them out of the lobby
-        {:ok, push_navigate(socket, to: ~p"/battles/#{battle_id}")}
+        {:ok, push_navigate(socket, to: ~p"/battle")}
       _ ->
         socket =
           if connected?(socket) do
@@ -54,8 +54,8 @@ defmodule RoguelandiaWeb.LobbyLive do
     end
   end
 
-  def handle_info(%Phoenix.Socket.Broadcast{topic: "player:" <> _player_id, event: "commence_battle", payload: battle}, socket) do
-    {:noreply, push_redirect(socket, to: ~p"/battles/#{battle.id}")}
+  def handle_info(%Phoenix.Socket.Broadcast{topic: "player:" <> _player_id, event: "commence_battle", payload: _battle}, socket) do
+    {:noreply, push_redirect(socket, to: ~p"/battle")}
   end
 
   def handle_info({RoguelandiaWeb.Presence, {:join, presence}}, socket) do
@@ -73,8 +73,8 @@ defmodule RoguelandiaWeb.LobbyLive do
   @impl true
   def handle_event("challenge", %{"player_id" => challenged_player_id}, %{assigns: %{player: %{id: challenger_id, name: challenger_name, level: challenger_level}}} = socket) do
     case Game.find_or_create_empty_player_battle(challenger_id) do
-      {:has_battle, battle_id} ->
-        {:noreply, push_redirect(socket, to: ~p"/battles/#{battle_id}")}
+      {:has_battle, _battle_id} ->
+        {:noreply, push_redirect(socket, to: ~p"/battle")}
       {:ok, battle} ->
         # TODO MAYBE would be nice to persist challenges in DB to make them cancellable
         # and more interactive, but we're quick and dirty here!
@@ -90,8 +90,8 @@ defmodule RoguelandiaWeb.LobbyLive do
     case Game.accept_player_challenge(challenge, socket.assigns.player.id) do
       {:error, message} ->
         {:noreply, put_flash(socket, :error, message)}
-      {:ok, battle} ->
-        {:noreply, push_redirect(socket, to: ~p"/battles/#{battle.id}")}
+      {:ok, _battle} ->
+        {:noreply, push_redirect(socket, to: ~p"/battle")}
     end
   end
 

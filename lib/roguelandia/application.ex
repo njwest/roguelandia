@@ -17,12 +17,11 @@ defmodule Roguelandia.Application do
       # Start a worker by calling: Roguelandia.Worker.start_link(arg)
       # {Roguelandia.Worker, arg},
       RoguelandiaWeb.Presence,
-      # Start a dynamic supervisor for game servers
-      {DynamicSupervisor, strategy: :one_for_one, name: GameSupervisor},
-      # Start a registry for game servers
-      Registry.child_spec(keys: :unique, name: GameRegistry),
-      # Start to serve requests, typically the last entry
       RoguelandiaWeb.Endpoint,
+      # Start a dynamic supervisor for battle servers
+      {DynamicSupervisor, strategy: :one_for_one, name: BattleSupervisor},
+      # Start a registry for battle servers
+      Registry.child_spec(keys: :unique, name: BattleRegistry)
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
