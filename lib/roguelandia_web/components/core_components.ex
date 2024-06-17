@@ -51,6 +51,7 @@ defmodule RoguelandiaWeb.CoreComponents do
   """
   attr :id, :string, required: true
   attr :show, :boolean, default: false
+  attr :hideable, :boolean, default: true
   attr :on_cancel, JS, default: %JS{}
   slot :inner_block, required: true
 
@@ -60,7 +61,7 @@ defmodule RoguelandiaWeb.CoreComponents do
       id={@id}
       phx-mounted={@show && show_modal(@id)}
       phx-remove={hide_modal(@id)}
-      data-cancel={JS.exec(@on_cancel, "phx-remove")}
+      data-cancel={if @hideable, do: JS.exec(@on_cancel, "phx-remove"), else: nil}
       class="relative z-50 hidden"
     >
       <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
@@ -73,22 +74,21 @@ defmodule RoguelandiaWeb.CoreComponents do
         tabindex="0"
       >
         <div class="flex min-h-full items-center justify-center">
-          <div class="w-full max-w-3xl p-4 sm:p-6 lg:py-8">
+          <div class="max-w-3xl p-4 sm:p-6 lg:py-8">
             <.focus_wrap
               id={"#{@id}-container"}
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
-              phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
               class="dialogue-border relative hidden rounded-2xl px-8 md:px-14 py-6 shadow-lg transition"
             >
-              <div class="absolute top-6 right-5">
+              <div :if={@hideable} class="absolute top-6 right-5">
                 <button
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
                   type="button"
-                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
+                  class="-m-3 flex-none p-3 hover:opacity-80"
                   aria-label={gettext("close")}
                 >
-                  <.icon name="hero-x-mark-solid" class="h-5 w-5" />
+                  <.icon name="hero-x-mark-solid" class="h-5 w-5 text-white" />
                 </button>
               </div>
               <div id={"#{@id}-content"}>

@@ -4,31 +4,39 @@ defmodule Roguelandia.Game do
   """
 
   import Ecto.Query, warn: false
+  require Logger
   alias Ecto.Multi
 
-  alias Roguelandia.Pawn.Player
   alias Roguelandia.Repo
+  alias RoguelandiaWeb.Endpoint
 
+  alias Roguelandia.Pawn.Player
   alias Roguelandia.Game.{Battle, BattlePlayer}
 
-
-  def accept_player_battle(battle_id, player_id) do
+  def accept_player_challenge(%{battle_id: battle_id, challenger_id: challenger_id} = _challenge, player_id) do
     case Repo.get(Battle, battle_id) do
       nil ->
         {:error, "Battle not found"}
-
       %{active: true} ->
         {:error, "Too late, challenger is battling someone else."}
       battle ->
         case find_active_player_battle(battle.creator_id) do
           nil ->
             Multi.new()
-            |> Multi.insert(:battle_player, %BattlePlayer{battle_id: battle_id, player_id: player_id})
+            |> Multi.insert(:challenged_battle_player, %BattlePlayer{battle_id: battle_id, player_id: player_id})
+            |> Multi.insert(:challenger_battle_player, %BattlePlayer{battle_id: battle_id, player_id: challenger_id})
             |> Multi.update(:battle, Battle.changeset(battle, %{active: true}))
             |> Repo.transaction()
             |> case do
-              {:ok, _result} -> {:ok, battle}
-              {:error, _failed_operation, changeset, _changes_so_far} -> {:error, changeset}
+              {:ok, _result} ->
+                Endpoint.broadcast("player:#{challenger_id}", "commence_battle", battle)
+                Endpoint.broadcast("player:#{player_id}", "commence_battle", battle)
+
+                {:ok, battle}
+              {:error, failed_operation, changeset, _changes_so_far} ->
+                Logger.error("Accept challenge multi failed #{inspect(failed_operation)}: #{inspect(changeset)}")
+
+                {:error, changeset}
             end
           _battle ->
             {:error, "Too late, challenger is battling someone else."}

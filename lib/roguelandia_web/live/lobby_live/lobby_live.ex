@@ -1,9 +1,8 @@
 defmodule RoguelandiaWeb.LobbyLive do
 
-  alias RoguelandiaWeb.Endpoint
-
   use RoguelandiaWeb, :live_view
 
+  alias RoguelandiaWeb.Endpoint
   alias RoguelandiaWeb.Presence
   alias Roguelandia.Game
 
@@ -15,19 +14,25 @@ defmodule RoguelandiaWeb.LobbyLive do
       |> assign(:player, player)
       |> assign(:challenge, nil)
 
-    socket =
-      if connected?(socket) do
-        Presence.track_player(player.id, %{id: player.id, name: player.name, level: player.level})
-        Presence.subscribe()
+    case Game.find_active_player_battle(player.id) do
+      %{id: battle_id} ->
+        # Player has a battle, kick them out of the lobby
+        {:ok, push_navigate(socket, to: ~p"/battles/#{battle_id}")}
+      _ ->
+        socket =
+          if connected?(socket) do
+            Presence.track_player(player.id, %{id: player.id, name: player.name, level: player.level})
+            Presence.subscribe()
 
-        Phoenix.PubSub.subscribe(Roguelandia.PubSub, "player:#{player.id}")
+            Phoenix.PubSub.subscribe(Roguelandia.PubSub, "player:#{player.id}")
 
-        stream(socket, :presences, Presence.list_online_players())
-      else
-        socket
-      end
+            stream(socket, :presences, Presence.list_online_players())
+          else
+            socket
+          end
 
-    {:ok, socket}
+        {:ok, socket}
+    end
   end
 
   @impl true
@@ -42,7 +47,15 @@ defmodule RoguelandiaWeb.LobbyLive do
 
   @impl true
   def handle_info(%Phoenix.Socket.Broadcast{topic: "player:" <> _player_id, event: "challenge", payload: challenge_payload}, socket) do
-    {:noreply, assign(socket, :challenge, challenge_payload)}
+    if is_nil(socket.assigns.challenge) do
+      {:noreply, assign(socket, :challenge, challenge_payload)}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  def handle_info(%Phoenix.Socket.Broadcast{topic: "player:" <> _player_id, event: "commence_battle", payload: battle}, socket) do
+    {:noreply, push_redirect(socket, to: ~p"/battles/#{battle.id}")}
   end
 
   def handle_info({RoguelandiaWeb.Presence, {:join, presence}}, socket) do
@@ -63,8 +76,8 @@ defmodule RoguelandiaWeb.LobbyLive do
       {:has_battle, battle_id} ->
         {:noreply, push_redirect(socket, to: ~p"/battles/#{battle_id}")}
       {:ok, battle} ->
-
-        IO.inspect("Send player challenge")
+        # TODO MAYBE would be nice to persist challenges in DB to make them cancellable
+        # and more interactive, but we're quick and dirty here!
         challenge_payload = %{challenger_id: challenger_id, challenger_name: challenger_name, challenger_level: challenger_level, battle_id: battle.id}
 
         Endpoint.broadcast("player:#{challenged_player_id}", "challenge", challenge_payload)
@@ -73,8 +86,8 @@ defmodule RoguelandiaWeb.LobbyLive do
     end
   end
 
-  def handle_event("accept", %{"battle_id" => battle_id}, socket) do
-    case Game.accept_player_battle(String.to_integer(battle_id), socket.assigns.player.id) do
+  def handle_event("accept", _, %{assigns: %{challenge: challenge}} = socket) do
+    case Game.accept_player_challenge(challenge, socket.assigns.player.id) do
       {:error, message} ->
         {:noreply, put_flash(socket, :error, message)}
       {:ok, battle} ->
@@ -82,7 +95,7 @@ defmodule RoguelandiaWeb.LobbyLive do
     end
   end
 
-  def handle_event("decline", %{"battle_id" => _battle_id}, socket) do
+  def handle_event("decline", _, socket) do
     {:noreply, assign(socket, :challenge, nil)}
   end
 end
