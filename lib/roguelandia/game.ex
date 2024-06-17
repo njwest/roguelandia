@@ -58,9 +58,13 @@ defmodule Roguelandia.Game do
         join: b in assoc(bp, :battle),
         where: p.id == ^player_id,
         where: b.active == true,
+        order_by: [asc: b.id],
         select: b
 
-    Repo.one(query)
+    case Repo.all(query) do
+      [active_battle | _] -> active_battle
+      [] -> nil
+    end
   end
 
   def find_battle_without_participants(creator_id) do

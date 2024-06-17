@@ -17,7 +17,7 @@ defmodule Roguelandia.Game.Battle do
   @doc false
   def changeset(battle, attrs) do
     battle
-    |> cast(attrs, [:creator_id])
+    |> cast(attrs, [:creator_id, :active])
     |> validate_required([:creator_id])
   end
 end

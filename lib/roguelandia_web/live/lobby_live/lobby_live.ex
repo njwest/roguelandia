@@ -74,7 +74,7 @@ defmodule RoguelandiaWeb.LobbyLive do
   end
 
   def handle_event("accept", %{"battle_id" => battle_id}, socket) do
-    case Game.accept_player_battle(battle_id, socket.assigns.player.id) do
+    case Game.accept_player_battle(String.to_integer(battle_id), socket.assigns.player.id) do
       {:error, message} ->
         {:noreply, put_flash(socket, :error, message)}
       {:ok, battle} ->
