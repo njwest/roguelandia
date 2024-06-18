@@ -23,6 +23,7 @@ defmodule RoguelandiaWeb.ClassLive.FormComponent do
         <.input field={@form[:hp]} type="number" label="Hp" />
         <.input field={@form[:strength]} type="number" label="Strength" />
         <.input field={@form[:attack]} type="text" label="Attack" />
+        <.input field={@form[:special]} type="text" label="Special" />
         <.input field={@form[:avatar_url]} type="text" label="Avatar url" />
         <.input field={@form[:active_limit]} type="number" label="Active limit" />
         <:actions>
