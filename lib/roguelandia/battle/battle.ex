@@ -7,7 +7,10 @@ defmodule Roguelandia.Game.Battle do
 
   schema "battles" do
     field :active, :boolean
+    field :turns, {:array, :integer}
     belongs_to :creator, Player, foreign_key: :creator_id
+    belongs_to :winner, Player, foreign_key: :winner_id
+
     many_to_many :participants, Player, join_through: "battle_players"
     has_many :battle_players, BattlePlayer
 
@@ -17,7 +20,7 @@ defmodule Roguelandia.Game.Battle do
   @doc false
   def changeset(battle, attrs) do
     battle
-    |> cast(attrs, [:creator_id, :active])
+    |> cast(attrs, [:creator_id, :winner_id, :active, :turns])
     |> validate_required([:creator_id])
   end
 end

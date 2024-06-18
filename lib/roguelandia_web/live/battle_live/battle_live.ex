@@ -4,49 +4,72 @@ defmodule RoguelandiaWeb.BattleLive do
   alias Roguelandia.{Game, BattleServer, BattleManager}
 
   @impl true
-  def mount(_params, _session, %{assigns: %{current_user: %{player: %{id: player_id}}}} = socket) do
-    case Game.find_active_player_battle(player_id) do
+  def mount(_params, _session, %{assigns: %{current_user: %{player: %{id: current_player_id}}}} = socket) do
+    case Game.find_active_player_battle(current_player_id) do
       nil ->
         {:ok, push_navigate(socket, to: ~p"/lobby")}
       %{id: battle_id} = _battle ->
+        if connected?(socket) do
+          Phoenix.PubSub.subscribe(Roguelandia.PubSub, "battle:#{battle_id}")
+        end
+
         {:ok, pid} = BattleManager.find_or_create_battle_server(battle_id)
 
         battle = BattleServer.get_state(pid)
-
-        player = Enum.find(battle.participants, fn participant ->
-          participant.id == player_id
-        end)
-        IO.inspect(battle.participants, label: "Participants")
-
-        IO.inspect(player, label: "Player: ")
-        other_participants = Enum.filter(battle.participants, fn participant ->
-          participant.id != player_id
-        end)
-
-        opponent = hd(other_participants)
 
         {
           :ok,
           socket
           |> assign(:battle_pid, pid)
-          |> assign(:battle, battle)
-          |> assign(:player, player)
-          |> assign(:opponent, opponent)
+          |> assign(:action_text, "")
+          |> assign_battle(battle, current_player_id)
         }
     end
   end
 
-  # @impl true
-  # def handle_params(%{"battle_id" => battle_id}, _, socket) do
-  #   socket =
-  #     if connected?(socket) do
-  #       {:ok, pid} = BattleManager.find_or_create_battle_server(battle_id)
+  @impl true
+  def handle_info(%Phoenix.Socket.Broadcast{topic: "battle:" <> _battle_id, event: "battle_updated", payload: {battle, action}}, %{assigns: %{player: %{id: current_player_id}}} = socket) do
+    action_text =
+      cond do
+        action.actor_id == current_player_id ->
+          "You #{action.message}"
+        true ->
+          "You were #{action.message}"
+      end
 
-  #       assign(socket, :battle_pid, pid)
-  #     else
-  #       socket
-  #     end
+    {
+      :noreply,
+      socket
+      |> assign(:action_text, action_text)
+      |> assign_battle(battle, current_player_id)
+    }
+  end
 
-  #   {:noreply, socket}
-  # end
+  @impl true
+  def handle_event("attack", _, %{assigns: %{ player: player, opponent: opponent, battle_pid: pid}} = socket) do
+    BattleServer.attack(pid, player.id,  opponent.id)
+
+    {:noreply, assign(socket, :action_text, "You #{player.attack} at #{opponent.name}...")}
+  end
+
+  def handle_event("flee", _, %{assigns: %{ player: %{id: player_id}, opponent: opponent, battle_pid: pid}} = socket) do
+    BattleServer.flee(pid, player_id)
+
+    {:noreply, assign(socket, :action_message, "You attempt to flee from #{opponent.name}...")}
+  end
+
+  defp assign_battle(socket, battle, current_player_id) do
+    player = Enum.find(battle.participants, fn participant ->
+      participant.id == current_player_id
+    end)
+
+    other_participants = Enum.filter(battle.participants, fn participant ->
+      participant.id != current_player_id
+    end)
+
+    socket
+    |> assign(:player, player)
+    |> assign(:opponent, hd(other_participants))
+    |> assign(:current_turn_player_id, hd(battle.turns))
+  end
 end

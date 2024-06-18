@@ -7,11 +7,51 @@ defmodule Roguelandia.Game do
   require Logger
   alias Ecto.Multi
 
-  alias Roguelandia.Repo
+  alias Roguelandia.{Repo, Pawn}
   alias RoguelandiaWeb.Endpoint
 
   alias Roguelandia.Pawn.Player
   alias Roguelandia.Game.{Battle, BattlePlayer}
+
+  defp rotate_list_left([head | tail]) do
+    tail ++ [head]
+  end
+
+  def process_attack(battle, attacker_id, target_id) do
+    attacker = find_participant(battle, attacker_id)
+
+    attack_result = Game.Rolls.attack_roll(attacker.strength)
+
+    Multi.new()
+    |> Multi.run(:maybe_hurt_target, fn _repo, _changes_so_far ->
+      case attack_result do
+        {:hit, damage} ->
+          target = find_participant(battle, target_id)
+
+          Pawn.update_player(target, %{hp: target.hp - damage})
+        {:miss, _} ->
+          {:ok, nil}
+      end
+    end)
+    # TODO MAYBE better experience system
+    |> Multi.run(:give_attacker_exp, fn _repo, _changes_so_far ->
+      Pawn.update_player(attacker, %{experience: attacker.experience + 25})
+    end)
+    |> Multi.update(:battle, Battle.changeset(battle, %{turns: rotate_list_left(battle.turns)}))
+    |> Repo.transaction()
+    |> case do
+      {:ok, _result} ->
+        {:ok, attack_result}
+      {:error, failed_operation, changeset, _changes_so_far} ->
+        Logger.error("process_attack()/3 multi failed #{inspect(failed_operation)}: #{inspect(changeset)}")
+
+        {:error, changeset}
+    end
+  end
+
+  def find_participant(battle, player_id) do
+    Enum.find(battle.participants, fn participant -> participant.id == player_id end)
+  end
 
   def find_battle_with_participants(battle_id) do
     Repo.one(
@@ -30,10 +70,12 @@ defmodule Roguelandia.Game do
       battle ->
         case find_active_player_battle(battle.creator_id) do
           nil ->
+            turns = Enum.shuffle([player_id, challenger_id])
+
             Multi.new()
             |> Multi.insert(:challenged_battle_player, %BattlePlayer{battle_id: battle_id, player_id: player_id})
             |> Multi.insert(:challenger_battle_player, %BattlePlayer{battle_id: battle_id, player_id: challenger_id})
-            |> Multi.update(:battle, Battle.changeset(battle, %{active: true}))
+            |> Multi.update(:battle, Battle.changeset(battle, %{active: true, turns: turns}))
             |> Repo.transaction()
             |> case do
               {:ok, _result} ->

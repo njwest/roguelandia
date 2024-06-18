@@ -76,8 +76,8 @@ defmodule RoguelandiaWeb.LobbyLive do
       {:has_battle, _battle_id} ->
         {:noreply, push_redirect(socket, to: ~p"/battle")}
       {:ok, battle} ->
-        # TODO MAYBE would be nice to persist challenges in DB to make them cancellable
-        # and more interactive, but we're quick and dirty here!
+        # TODO MAYBE would be nice to persist challenges in DB
+        # to make them more interactive etc
         challenge_payload = %{challenger_id: challenger_id, challenger_name: challenger_name, challenger_level: challenger_level, battle_id: battle.id}
 
         Endpoint.broadcast("player:#{challenged_player_id}", "challenge", challenge_payload)
