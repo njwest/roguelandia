@@ -19,25 +19,45 @@ defmodule Roguelandia.Game do
 
   def process_attack(battle, attacker_id, target_id) do
     attacker = find_participant(battle, attacker_id)
-
+    target = find_participant(battle, target_id)
     attack_result = Game.Rolls.attack_roll(attacker.strength)
+
+    target_new_hp =
+      case attack_result do
+        {:hit, damage} ->
+          target.hp - damage
+        {:miss, _} ->
+          nil
+      end
+
+    game_over? = if target_new_hp <= 0 and not is_nil(target_new_hp), do: true, else: false
 
     Multi.new()
     |> Multi.run(:maybe_hurt_target, fn _repo, _changes_so_far ->
-      case attack_result do
-        {:hit, damage} ->
-          target = find_participant(battle, target_id)
-
-          Pawn.update_player(target, %{hp: target.hp - damage})
-        {:miss, _} ->
-          {:ok, nil}
+      if is_nil(target_new_hp) do
+        {:ok, nil}
+      else
+        Pawn.update_player(target, %{hp: target_new_hp})
       end
     end)
-    # TODO MAYBE better experience system
     |> Multi.run(:give_attacker_exp, fn _repo, _changes_so_far ->
+      # TODO check player level up if game_over is true
       Pawn.update_player(attacker, %{experience: attacker.experience + 25})
     end)
-    |> Multi.update(:battle, Battle.changeset(battle, %{turns: rotate_list_left(battle.turns)}))
+    |> Multi.run(:battle, fn _repo, _changes_so_far ->
+      attrs = %{turns: rotate_list_left(battle.turns), active: !game_over?}
+
+      attrs =
+        if game_over? and is_nil(battle.winner_id) do
+          attrs
+          |> Map.put(:winner_id, attacker_id)
+          |> Map.put(:game_over_text, "#{attacker.name} won by knocking out #{target.name}!")
+        else
+          attrs
+        end
+
+      update_battle(battle, attrs)
+    end)
     |> Repo.transaction()
     |> case do
       {:ok, _result} ->
@@ -48,6 +68,53 @@ defmodule Roguelandia.Game do
         {:error, changeset}
     end
   end
+
+  def process_flee(battle, player_id) do
+    case Game.Rolls.flee_roll() do
+      :success ->
+        player = find_participant(battle, player_id)
+
+        other_participants = Enum.filter(battle.participants, fn participant ->
+          participant.id != player_id
+        end)
+
+        # NOTE assuming that battle is 1v1... FOR NOW! muahahaha
+        remainer = hd(other_participants)
+
+        Multi.new()
+        |> Multi.run(:give_remainer_exp, fn _repo, _changes_so_far ->
+          # TODO check player level up
+          Pawn.update_player(remainer, %{experience: remainer.experience + 50})
+        end)
+        |> Multi.run(:battle, fn _repo, _changes_so_far ->
+          update_battle(battle, %{active: false, game_over_text: "#{player.name} fled, #{remainer.name} won!", winner_id: remainer.id})
+        end)
+        |> Repo.transaction()
+        |> case do
+          {:ok, _result} ->
+            {:ok, :fled}
+          {:error, failed_operation, changeset, _changes_so_far} ->
+            Logger.error("Successful process_flee()/3 multi error: #{inspect(failed_operation)}: #{inspect(changeset)}")
+
+            {:error, changeset}
+        end
+      :failure ->
+        # Player failed to flee, end player turn
+        case update_battle(battle, %{turns: rotate_list_left(battle.turns)}) do
+          {:ok, _result} ->
+            {:ok, :failed}
+          {:error, changeset} ->
+            Logger.error("Successful process_flee()/3 multi error: #{inspect(changeset)}")
+
+            {:error, changeset}
+        end
+    end
+  end
+
+  # defp give_exp(player, exp) do
+    ## TODO Level up logic in here
+    ## after battle is over
+  # end
 
   def find_participant(battle, player_id) do
     Enum.find(battle.participants, fn participant -> participant.id == player_id end)

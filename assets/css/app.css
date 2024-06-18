@@ -42,12 +42,12 @@
     border: 8px double white;
  }
  
- /* .bg-skull-entrance{
-    background: url('../public/dm/Dungeon-door-skull.png');
+ /* .bg-skull-entrance {
+    background: url('/images/Dungeon-door-skull.png');
     background-repeat: no-repeat;
-    background-size: cover; 
+    background-size: cover;
     background-position: center;
- } */
+} */
 
  .radio-group {
     display: flex;

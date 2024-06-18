@@ -1,0 +1,17 @@
+<div>
+    <.centered_dialogue id="game-over" class="text-center">
+        <.header>
+            Game Over
+            <:subtitle>
+                <%= @game_over_text %>
+            </:subtitle>
+        </.header>
+
+        <.link href={~p"/lobby"}>
+            <button type="button" class="border-4 border-brand hover:bg-brand px-3 sm:text-2xl grow select-none mt-4">
+            Back to Lobby
+            </button>
+        </.link>
+
+    </.centered_dialogue>
+</div>

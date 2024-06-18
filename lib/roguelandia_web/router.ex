@@ -63,6 +63,8 @@ defmodule RoguelandiaWeb.Router do
       live "/lobby", LobbyLive, :lobby
 
       live "/battle/", BattleLive, :battle
+      live "/battles/:battle_id", GameOverLive, :battle
+
 
       live "/users/settings", UserLive.UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserLive.UserSettingsLive, :confirm_email

@@ -29,12 +29,25 @@ defmodule RoguelandiaWeb.BattleLive do
 
   @impl true
   def handle_info(%Phoenix.Socket.Broadcast{topic: "battle:" <> _battle_id, event: "battle_updated", payload: {battle, action}}, %{assigns: %{player: %{id: current_player_id}}} = socket) do
+    # TODO this is sloppy, change the system for action messages
+    # both here and in the BattleServer
+
     action_text =
-      cond do
-        action.actor_id == current_player_id ->
-          "You #{action.message}"
-        true ->
-          "You were #{action.message}"
+      case action.type do
+        :attack ->
+          cond do
+            action.actor_id == current_player_id ->
+              "You #{action.message}"
+            true ->
+              "You were #{action.message}"
+          end
+        :flee ->
+          cond do
+            action.actor_id == current_player_id ->
+              "You #{action.message}"
+            true ->
+              "#{socket.assigns.opponent.name} #{action.message}"
+          end
       end
 
     {
@@ -59,17 +72,20 @@ defmodule RoguelandiaWeb.BattleLive do
   end
 
   defp assign_battle(socket, battle, current_player_id) do
-    player = Enum.find(battle.participants, fn participant ->
-      participant.id == current_player_id
-    end)
+    if is_nil(battle.winner_id) do
+      player = Game.find_participant(battle, current_player_id)
 
-    other_participants = Enum.filter(battle.participants, fn participant ->
-      participant.id != current_player_id
-    end)
+      other_participants = Enum.filter(battle.participants, fn participant ->
+        participant.id != current_player_id
+      end)
 
-    socket
-    |> assign(:player, player)
-    |> assign(:opponent, hd(other_participants))
-    |> assign(:current_turn_player_id, hd(battle.turns))
+      socket
+      |> assign(:player, player)
+      |> assign(:opponent, hd(other_participants))
+      |> assign(:current_turn_player_id, hd(battle.turns))
+    else
+      push_navigate(socket, to: ~p"/battles/#{battle.id}")
+    end
+
   end
 end

@@ -1,7 +1,8 @@
 <div class="w-full h-full hud flex bg-class flex-col">
+    <%!-- TODO componentize health bar --%>
     <div class="w-full sm:w-[95%] z-40 mt-2 sm:mx-6 left-0 bg-transparent">
         <div class="border-8 border-gray-200 border-double rounded-lg bg-black">
-            <div class={"h-6 #{if 100 * (@player.max_hp / @player.hp) > 60, do: "bg-green-600", else: "bg-brand animate-pulse"}"} style={"width: #{100 * (@opponent.hp / @opponent.max_hp)}%"} />
+            <div class={"h-8 #{if 100 * (@opponent.hp / @opponent.max_hp) > 50, do: "bg-green-600", else: "bg-brand animate-pulse"}"} style={"width: #{100 * (@opponent.hp / @opponent.max_hp)}%"} />
         </div>
         <div class="inline-block max-w-content">
             <h3 class="text-outline text-lg sm:text-2xl text-white font-medium rounded-lg py-1 px-2 select-none"><%= @opponent.name %>'s HP</h3>
@@ -15,9 +16,8 @@
             <h3 class="text-outline text-lg text-white font-medium rounded-lg py-1 px-2 select-none">Your HP</h3>
         </div>
         <div class="border-8 border-gray-200 border-double rounded-lg bg-black">
-            <div class={"h-6 #{if 100 * (@player.max_hp / @player.hp) > 60, do: "bg-green-600", else: "bg-brand animate-pulse"}"} style={"width: #{100 * (@player.hp / @player.max_hp)}%"} />
+            <div class={"h-6 #{if 100 * (@player.hp / @player.max_hp) > 50, do: "bg-green-600", else: "bg-brand animate-pulse"}"} style={"width: #{100 * (@player.hp / @player.max_hp)}%"} />
         </div>
-        
     </div>
     <div class="dialogue-box h-[50%] text-white flex flex-col bg-none">
         <div class="-mt-[20px] ml-[10px] bg-transparent">
@@ -27,13 +27,12 @@
         </div>
         <div class="overflow-y-auto flex flex-col justify-between h-full">
             <p class="px-2 py-1 md:py-2 md:px-6 text-xl md:text-3xl lg:text-3xl text-white select-none ">
-                <%= @action_text %><br/>
+                <%= @action_text %><br />
                 <%= if @current_turn_player_id == @player.id, do: "It's your turn! Choose an action below.", else: "It's #{@opponent.name}'s turn." %> 
             </p>
             
-            <%!-- if player turn show --%>
             <ul :if={@current_turn_player_id == @player.id} class="flex flex-col mt-2 overflow-auto select-none">
-                <%!-- action button --%>
+                <%!-- TODO componentize action buttons --%>
                 <li 
                     class="action-button"
                     phx-click="attack"

@@ -9,7 +9,7 @@ defmodule Roguelandia.Pawn.Class do
     field :attack, :string
     field :special, :string
     field :avatar_url, :string
-    field :active_limit, :integer
+    field :active_limit, :integer, default: 100
     field :available, :integer, virtual: true
 
     timestamps(type: :utc_datetime)
@@ -19,6 +19,6 @@ defmodule Roguelandia.Pawn.Class do
   def changeset(class, attrs) do
     class
     |> cast(attrs, [:name, :hp, :strength, :attack, :special, :avatar_url, :active_limit])
-    |> validate_required([:name, :hp, :strength, :attack, :special, :avatar_url, :active_limit])
+    |> validate_required([:name, :hp, :strength, :attack, :special, :avatar_url])
   end
 end

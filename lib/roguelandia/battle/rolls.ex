@@ -16,13 +16,13 @@ defmodule Game.Rolls do
 
   def flee_roll do
     if flee?() do
-      {:success, "You have successfully fled!"}
+      :success
     else
-      {:failure, "Flee attempt failed."}
+      :failure
     end
   end
 
-  defp flee?(flee_chance \\ 2) do
+  defp flee?(flee_chance \\ 3) do
     :rand.uniform(flee_chance) == 1
   end
 

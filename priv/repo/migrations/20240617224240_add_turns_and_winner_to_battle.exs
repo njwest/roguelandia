@@ -1,4 +1,4 @@
-defmodule Roguelandia.Repo.Migrations.AddWinnerToBattle do
+defmodule Roguelandia.Repo.Migrations.AddTurnsAndWinnerToBattle do
   use Ecto.Migration
 
   def change do

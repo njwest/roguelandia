@@ -54,21 +54,9 @@ defmodule Roguelandia.BattleServer do
     {:reply, state, state}
   end
 
-  def handle_call({:flee, player_id}, _from, state) do
-    if state.winner do
-      {:reply, {:error, "Battle has ended"}, state}
-    else
-      new_state = process_flee(state, player_id)
-      {:reply, :ok, new_state}
-    end
-  end
-
   @impl true
   def handle_cast({:attack, attacker_id, target_id}, state) do
-    if state.winner_id do
-      # TODO battle has ended broadcast
-      {:noreply, state}
-    else
+    if state.active do
       current_turn_player_id = hd(state.turns)
 
       if attacker_id != current_turn_player_id do
@@ -79,7 +67,7 @@ defmodule Roguelandia.BattleServer do
           {:ok, attack_result} ->
             new_state = Game.find_battle_with_participants(state.id)
 
-            action_message = %{actor_id: attacker_id, message: attack_action_text(attack_result)}
+            action_message = %{actor_id: attacker_id, message: attack_action_text(attack_result), type: :attack}
 
             Endpoint.broadcast("battle:#{new_state.id}", "battle_updated", {new_state, action_message})
 
@@ -88,8 +76,36 @@ defmodule Roguelandia.BattleServer do
             # TODO broadcast error
             {:noreply, state}
         end
-
       end
+    else
+      new_state = Game.find_battle_with_participants(state.id)
+
+      {:noreply, new_state}
+    end
+  end
+
+  def handle_cast({:flee, player_id}, state) do
+    case Game.process_flee(state, player_id) do
+      {:ok, :failed} ->
+        new_state = Game.find_battle_with_participants(state.id)
+
+        action_message = %{actor_id: player_id, message: "tried to flee and failed!", type: :flee}
+
+        Endpoint.broadcast("battle:#{new_state.id}", "battle_updated", {new_state, action_message})
+
+        {:noreply, new_state}
+      {:ok, :fled} ->
+        new_state = Game.find_battle_with_participants(state.id)
+        # TODO this action_message should never render on client UI
+        # but need to add battle_updated with no message func to client
+        action_message = %{actor_id: player_id, message: "fled!", type: :flee}
+
+        Endpoint.broadcast("battle:#{new_state.id}", "battle_updated", {new_state, action_message})
+
+        {:noreply, new_state}
+      {:error, _message} ->
+        # TODO broadcast error
+        {:noreply, state}
     end
   end
 
@@ -102,47 +118,5 @@ defmodule Roguelandia.BattleServer do
       {:miss, _} ->
         "missed!"
     end
-  end
-
-  defp check_winner(players) do
-    living_players = Enum.filter(players, fn {_id, player} -> player.health > 0 end)
-
-    case living_players do
-      [%{id: id}] -> id
-      _ -> nil
-    end
-  end
-
-  def handle_cast({:flee, player_id}, state) do
-    if state.winner do
-      # broadcast
-      {:noreply, state}
-    else
-      current_turn_player_id = hd(state.turns)
-
-      if player_id != current_turn_player_id do
-        # broadcast
-        {:noreply, state}
-      else
-        # new_state = process_flight(state, player_id)
-
-        {:noreply, state}
-      end
-    end
-  end
-
-  defp process_flee(state, player_id) do
-    players = Map.delete(state.players, player_id)
-    new_turn_order = List.delete(state.turn_order, player_id)
-    next_turn = hd(new_turn_order)
-    new_winner = check_winner(players)
-
-    %{
-      state
-      | players: players,
-        turn_order: new_turn_order,
-        current_turn: next_turn,
-        winner: new_winner
-    }
   end
 end
