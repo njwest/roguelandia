@@ -1,8 +1,6 @@
 defmodule RoguelandiaWeb.GameOverLive do
   use RoguelandiaWeb, :live_view
 
-  alias Roguelandia.{Game, BattleServer, BattleManager}
-
   @impl true
   def mount(_params, _session, socket) do
     {

@@ -76,12 +76,13 @@ defmodule RoguelandiaWeb.Router do
       live "/bosses/:id", BossLive.Show, :show
       live "/bosses/:id/show/edit", BossLive.Show, :edit
 
-      live "/classes", ClassLive.Index, :index
-      live "/classes/new", ClassLive.Index, :new
-      live "/classes/:id/edit", ClassLive.Index, :edit
+      # TODO put behind admin wall
+      # live "/classes", ClassLive.Index, :index
+      # live "/classes/new", ClassLive.Index, :new
+      # live "/classes/:id/edit", ClassLive.Index, :edit
 
-      live "/classes/:id", ClassLive.Show, :show
-      live "/classes/:id/show/edit", ClassLive.Show, :edit
+      # live "/classes/:id", ClassLive.Show, :show
+      # live "/classes/:id/show/edit", ClassLive.Show, :edit
     end
   end
 
