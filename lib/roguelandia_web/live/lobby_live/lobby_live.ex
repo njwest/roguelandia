@@ -36,16 +36,6 @@ defmodule RoguelandiaWeb.LobbyLive do
   end
 
   @impl true
-  def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
-  end
-
-  defp apply_action(socket, _action, _params) do
-    socket
-    |> assign(:page_title, "Home")
-  end
-
-  @impl true
   def handle_info(%Phoenix.Socket.Broadcast{topic: "player:" <> _player_id, event: "challenge", payload: challenge_payload}, socket) do
     if is_nil(socket.assigns.challenge) do
       {:noreply, assign(socket, :challenge, challenge_payload)}

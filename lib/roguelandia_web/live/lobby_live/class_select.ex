@@ -12,7 +12,7 @@ defmodule RoguelandiaWeb.LobbyLive.ClassSelect do
             <div class="grid grid-cols-2 flex-1">
                 <.input type="image-radio" options={@class_opts} field={@form[:class_id]} />
             </div>
-            <div class="dialogue-box flex-grow">
+            <div class="dialogue-box flex-grow z-10">
                 <div class="m-auto">
                     <%= if @class_selected do %>
                         <.button class="w-full" phx-disable-with="Saving...">
@@ -45,18 +45,12 @@ defmodule RoguelandiaWeb.LobbyLive.ClassSelect do
 
   @impl true
   def handle_event("validate", %{"player" => player_params}, socket) do
-    changeset =
-      %Player{}
-      |> Player.changeset(player_params)
-      |> Map.put(:action, :validate)
-
     class_selected = Map.has_key?(player_params, "class_id") && player_params["class_id"] != nil
 
     {
       :noreply,
       socket
       |> assign(:class_selected, class_selected)
-      |> assign_form(changeset)
     }
   end
 
@@ -65,6 +59,7 @@ defmodule RoguelandiaWeb.LobbyLive.ClassSelect do
       {:error, message} ->
         {:noreply, put_flash(socket, :error, message)}
       {:ok, _player_result} ->
+        # Push navigate to re-render the lobby
         {:noreply, push_navigate(socket, to: ~p"/lobby")}
     end
   end
