@@ -19,6 +19,6 @@ defmodule Roguelandia.Pawn.Class do
   def changeset(class, attrs) do
     class
     |> cast(attrs, [:name, :hp, :strength, :attack, :special, :avatar_url, :active_limit])
-    |> validate_required([:name, :hp, :strength, :attack, :special, :avatar_url])
+    |> validate_required([:name, :hp, :strength, :attack, :avatar_url])
   end
 end
