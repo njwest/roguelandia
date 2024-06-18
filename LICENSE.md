@@ -1,5 +1,7 @@
 Roguelandia Software License
 
+tl;dr if you want to build something that makes money or is sold to a client / brand, contact Nick to make a deal at mail@nickwe.st.
+
 This Software License ("License") is entered into by and between Nick West ("Licensor") and any person or entity who makes any use of the software ("Licensee").
 
 1. Grant of License
@@ -38,7 +40,7 @@ This Software License ("License") is entered into by and between Nick West ("Lic
 
 8. Governing Law
 
-8.1. This License shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles.
+8.1. This License shall be governed by and construed in accordance with the laws of Delaware, USA, without regard to its conflict of law principles.
 
 By using the Software, you acknowledge that you have read this License, understand it, and agree to be bound by its terms and conditions.
 
