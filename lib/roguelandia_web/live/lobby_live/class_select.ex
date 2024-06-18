@@ -45,12 +45,18 @@ defmodule RoguelandiaWeb.LobbyLive.ClassSelect do
 
   @impl true
   def handle_event("validate", %{"player" => player_params}, socket) do
+    changeset =
+      %Player{}
+      |> Player.changeset(player_params)
+      |> Map.put(:action, :validate)
+
     class_selected = Map.has_key?(player_params, "class_id") && player_params["class_id"] != nil
 
     {
       :noreply,
       socket
       |> assign(:class_selected, class_selected)
+      |> assign_form(changeset)
     }
   end
 
