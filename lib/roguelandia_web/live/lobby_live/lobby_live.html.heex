@@ -33,7 +33,7 @@
             You've been challenged by <span class="inherit text-cyan-200"><%= @challenge.challenger_name %> (Lvl <%= @challenge.challenger_level %>)</span>!
         </.header>
         <div class="flex space-x-4 w-full mt-10">
-            <button type="button" phx-click="accept" class="border-4 border-brand hover:bg-brand px-3 sm:text-2xl grow select-none" phx-throttle={8000}>
+            <button type="button" phx-click="accept" class="hollow-button" phx-throttle={8000}>
                 Battle!
             </button>
             <button type="button" phx-click="decline" class="border-4 border-zinc-200 px-3 hover:bg-zinc-200 hover:text-brand sm:text-2xl grow select-none" phx-throttle={8000}>
