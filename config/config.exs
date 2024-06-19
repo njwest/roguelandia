@@ -63,21 +63,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Hammer config for rate limiting
-config :hammer,
-  backend: {Hammer.Backend.ETS, [
-    expiry_ms: 60_000 * 60 * 4,
-    cleanup_interval_ms: 60_000 * 10
-  ]}
-
-# Use the following Hammer config for local Redis backend
-  # backend: {Hammer.Backend.Redis, [
-  #   delete_buckets_timeout: 10_0000,
-  #   key_prefix: "roguelandia:rate_limiter",
-  #   expiry_ms: 60_000 * 60 * 2,
-  #   redix_config: [host: "localhost", port: 6379]
-  # ]}
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
