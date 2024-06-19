@@ -21,22 +21,27 @@ if System.get_env("PHX_SERVER") do
 end
 
 if config_env() == :prod do
+  redis_url = System.get_env("REDIS_URL") ||
+    raise """
+      environment variable REDIS_URL is missing.
+    """
+
+  config :hammer,
+  backend: {Hammer.Backend.Redis, [
+    expiry_ms: 60_000 * 60 * 4, # 4 hours,
+    redix_config: [
+      host: redis_url,
+      port: 6379,
+      socket_opts: [:inet6]
+    ]
+  ]}
+
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """
         environment variable DATABASE_URL is missing.
         For example: ecto://USER:PASS@HOST/DATABASE
       """
-
-    config :hammer,
-    backend: {Hammer.Backend.Redis, [
-      expiry_ms: 60_000 * 60 * 4, # 4 hours
-      redis_url: System.get_env("REDIS_URL") || raise """
-        environment variable REDIS_URL is missing.
-      """
-    ]}
-
-
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
   config :roguelandia, Roguelandia.Repo,
