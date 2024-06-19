@@ -20,9 +20,8 @@ defmodule RoguelandiaWeb.UserSessionController do
 
   defp create(conn, %{"user" => user_params}, info) do
     %{"email" => email, "password" => password} = user_params
-    ip = ConnTools.get_ip(conn)
 
-    case RateLimiter.check_rate(email, ip) do
+    case RateLimiter.check_rate(conn, email) do
       :allow ->
         if user = Accounts.get_user_by_email_and_password(email, password) do
           conn
