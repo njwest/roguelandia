@@ -9,22 +9,20 @@ defmodule RoguelandiaWeb.LobbyLive.ClassSelect do
     ~H"""
       <div class="vh-100 w-full">
         <.form for={@form} class="flex flex-col" phx-submit="save" phx-change="validate" phx-target={@myself}>
-            <div class="grid grid-cols-2 flex-1">
-                <.input type="image-radio" options={@class_opts} field={@form[:class_id]} />
-            </div>
-            <div class="dialogue-box flex-1 z-10 bottom-0">
-                <div class="m-auto">
-                    <%= if @class_selected do %>
-                        <.button class="w-full" phx-disable-with="Saving...">
-                            Continue
-                        </.button>
-                    <% else %>
-                      <.button class="bg-black text-white w-full" disabled>
-                        <h2 class="text-center text-2xl sm:text-4xl">Select a Class</h2>
-                        </.button>
-                    <% end %>
-                </div>
-            </div>
+          <div class="grid grid-cols-2">
+              <.input type="image-radio" options={@class_opts} field={@form[:class_id]} />
+          </div>
+          <div class="w-full z-10 bottom-0 absolute">
+            <%= if @class_selected do %>
+                <.button class="w-full" phx-disable-with="Saving...">
+                  <h2 class="text-center text-2xl sm:text-4xl bg-inherit">Continue</h2>
+                </.button>
+            <% else %>
+              <.button class="bg-black text-white w-full" disabled>
+                <h2 class="text-center text-2xl sm:text-4xl">Select a Class</h2>
+              </.button>
+            <% end %>
+          </div>
         </.form>
       </div>
     """
