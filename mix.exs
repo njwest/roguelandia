@@ -58,7 +58,9 @@ defmodule Roguelandia.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.2"}
+      {:bandit, "~> 1.2"},
+      {:hammer, "~> 6.2"},
+      {:hammer_backend_redis, "~> 6.1"}
     ]
   end
 
