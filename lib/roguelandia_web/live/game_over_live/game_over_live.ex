@@ -1,4 +1,5 @@
 defmodule RoguelandiaWeb.GameOverLive do
+  alias Roguelandia.Game
   use RoguelandiaWeb, :live_view
 
   @impl true
