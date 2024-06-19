@@ -12,7 +12,7 @@ defmodule RoguelandiaWeb.LobbyLive.ClassSelect do
             <div class="grid grid-cols-2 flex-1">
                 <.input type="image-radio" options={@class_opts} field={@form[:class_id]} />
             </div>
-            <div class="dialogue-box flex-grow z-10">
+            <div class="dialogue-box flex-1 z-10 bottom-0">
                 <div class="m-auto">
                     <%= if @class_selected do %>
                         <.button class="w-full" phx-disable-with="Saving...">
