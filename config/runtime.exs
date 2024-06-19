@@ -24,9 +24,18 @@ if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
+        environment variable DATABASE_URL is missing.
+        For example: ecto://USER:PASS@HOST/DATABASE
       """
+
+    config :hammer,
+    backend: {Hammer.Backend.Redis, [
+      expiry_ms: 60_000 * 60 * 4, # 4 hours
+      redis_url: System.get_env("REDIS_URL") || raise """
+        environment variable REDIS_URL is missing.
+      """
+    ]}
+
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
