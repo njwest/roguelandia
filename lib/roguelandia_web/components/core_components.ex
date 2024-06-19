@@ -330,7 +330,7 @@ defmodule RoguelandiaWeb.CoreComponents do
         />
         <div class="radio-label select-none peer-checked:text-lime-200 text-center h-full w-full flex flex-col hover:opacity-80">
           <div class="m-auto">
-            <img src={option.avatar_url} class="max-h-24 sm:max-h-64 grayscale">
+            <img src={option.avatar_url} class="max-h-48 sm:max-h-64 grayscale">
             <%= option.name %>
           </div>
         </div>
