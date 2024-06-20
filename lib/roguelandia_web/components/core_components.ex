@@ -25,7 +25,7 @@ defmodule RoguelandiaWeb.CoreComponents do
   def centered_dialogue(assigns) do
     ~H"""
       <div id={@id} class="flex vh-100">
-        <div class={["dialogue-border m-auto p-2 sm:p-6", @class]}>
+        <div class={["dialogue-border m-auto pt-4 p-2 sm:p-6 bg-white dark:bg-black w-full sm:w-auto h-full sm:h-auto", @class]}>
           <%= render_slot(@inner_block) %>
         </div>
       </div>
@@ -215,7 +215,7 @@ defmodule RoguelandiaWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-3 space-y-4">
+      <div class="mt-1 space-y-3">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="pt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -465,7 +465,7 @@ defmodule RoguelandiaWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-xl sm:text-4xl leading-8 select-none">
+        <h1 class="text-2xl sm:text-4xl leading-8 select-none">
           <%= render_slot(@inner_block) %>
         </h1>
         <p :if={@subtitle != []} class="text-lg sm:text-2xl mt-2 leading-6 select-none">
