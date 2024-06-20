@@ -5,11 +5,11 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 * {
-    background-color: black;
-    color: white;
     font-family: "VT323", monospace;
-    font-weight: 400;
-    font-style: normal;
+}
+
+.light-dark-theme{
+    @apply bg-white dark:bg-black text-black dark:text-white;
 }
   
 .vh-100 {
@@ -25,14 +25,31 @@
     top: 0;
     left: 0;
  }
- 
+
 .dialogue-border{
+    @apply rounded-lg border-8 border-double border-black dark:border-white;
+}
+
+ .dialogue-box{
+    @apply w-full bg-white text-black border-black dark:bg-black dark:text-white dark:border-white bg-opacity-90 border-[10px] border-double rounded-lg;
+ }
+
+ .black-white-bg{
+    @apply text-black dark:text-white bg-white dark:bg-black bg-opacity-90;
+ }
+
+ .mini-menu-item{
+    @apply black-white-bg py-1 px-2 leading-6 font-semibold hover:text-brand;
+ }
+
+
+/* .dialogue-border{
     border-radius: 10px;
     border-style: double;
     border-color: white;
     border: 8px double white;
-}
-
+} */
+/* 
  .dialogue-box{
     width: 100%;
     background-color: rgba(0, 0, 0, 0.9);;
@@ -40,7 +57,7 @@
     border-style: double;
     border-color: white;
     border: 8px double white;
- }
+ } */
  
  /* .bg-skull-entrance {
     background: url('/images/Dungeon-door-skull.png');
@@ -49,7 +66,24 @@
     background-position: center;
 } */
 
- .radio-group {
+
+.self-button{
+    @apply sm:text-2xl px-4 flex items-center justify-center border-4 border-cyan-400 border-dotted w-full select-none;
+}
+
+.inactive-button{
+    @apply sm:text-2xl px-4 flex items-center justify-center border-4 border-brand border-dashed w-full select-none;
+}
+
+.action-button{
+    @apply border-b-2 border-double hover:border-green-500 py-2 text-center bg-cyan-800 hover:text-green-400 hover:bg-cyan-900 cursor-pointer;
+}
+
+.hollow-button{
+    @apply border-4 border-brand hover:bg-brand px-3 sm:text-2xl grow select-none;
+}
+
+.radio-group {
     display: flex;
     gap: 20px;
 }
@@ -76,20 +110,4 @@ input[type="radio"]:checked + .radio-label {
 
 input[type="radio"]:checked + .radio-label img {
     @apply grayscale-0;
-}
-
-.self-button{
-    @apply sm:text-2xl px-4 flex items-center justify-center border-4 border-cyan-400 border-dotted w-full select-none;
-}
-
-.inactive-button{
-    @apply sm:text-2xl px-4 flex items-center justify-center border-4 border-brand border-dashed w-full select-none;
-}
-
-.action-button{
-    @apply border-b-2 border-double hover:border-green-500 py-2 text-center bg-cyan-800 hover:text-green-400 hover:bg-cyan-900 cursor-pointer;
-}
-
-.hollow-button{
-    @apply border-4 border-brand hover:bg-brand px-3 sm:text-2xl grow select-none;
 }
