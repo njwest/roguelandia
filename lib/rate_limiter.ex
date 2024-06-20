@@ -3,7 +3,7 @@ defmodule RateLimiter do
   alias ExRated, as: RateLimiter
 
   @email_request_limit 6
-  @ip_request_limit 20
+  @ip_request_limit 100
   @time_window 300_000 # 5 minutes
 
   def check_rate(conn, email) do
