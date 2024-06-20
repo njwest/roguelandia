@@ -354,7 +354,7 @@ defmodule RoguelandiaWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class="rounded border-zinc-800 text-mint-dark focus:ring-0"
           {@rest}
         />
         <%= @label %>
@@ -413,8 +413,8 @@ defmodule RoguelandiaWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "sm:text-lg block w-full rounded-lg text-zinc-900 focus:ring-0 sm:sm:leading-6",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          "sm:text-lg block w-full rounded-lg text-zinc-900 focus:ring-0 sm:sm:leading-6 border-zinc-800 border-4 ",
+          @errors == [] && "border-zinc-300 focus:border-mint-dark dark:focus:border-mint",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
