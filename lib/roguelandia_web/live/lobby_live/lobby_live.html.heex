@@ -6,7 +6,12 @@
     />
 <% else %>
     <%= if @player.hp <= 0 do %>
-        Death screen
+        <.live_component
+            id={:death_screen}
+            module={RoguelandiaWeb.LobbyLive.DeathScreen}
+            player={@player}
+            user_id={@current_user.id}
+        />
     <% else %>
     <.centered_dialogue id="lobby" >
         <.header class="text-center">
