@@ -5,7 +5,15 @@
         player={@player}
     />
 <% else %>
-    <.centered_dialogue id="lobby">
+    <%= if @player.hp <= 0 do %>
+        <.live_component
+            id={:death_screen}
+            module={RoguelandiaWeb.LobbyLive.DeathScreen}
+            player={@player}
+            user_id={@current_user.id}
+        />
+    <% else %>
+    <.centered_dialogue id="lobby" >
         <.header class="text-center">
             Lobby
             <:subtitle>
@@ -41,6 +49,5 @@
             </button>
         </div>
     </.modal>
-
-
+    <% end %>
 <% end %>
