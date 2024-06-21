@@ -3,7 +3,7 @@ defmodule RoguelandiaWeb.UserLive.UserLoginLive do
 
   def render(assigns) do
     ~H"""
-    <.centered_dialogue id="login-dialogue" class="max-w-md">
+    <.centered_dialogue id="login-dialogue" class="max-w-md ">
       <.header class="text-center">
         Enter Roguelandia
         <:subtitle>

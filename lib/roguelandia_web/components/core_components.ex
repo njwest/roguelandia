@@ -25,7 +25,7 @@ defmodule RoguelandiaWeb.CoreComponents do
   def centered_dialogue(assigns) do
     ~H"""
       <div id={@id} class="flex vh-100">
-        <div class={["dialogue-border m-auto pt-4 p-2 sm:p-6 bg-white dark:bg-black w-full sm:w-auto h-full sm:h-auto content-center", @class]}>
+        <div class={["dialogue-border m-auto pt-4 p-2 sm:p-6 bg-white dark:bg-black w-full sm:w-auto content-center", @class]}>
           <%= render_slot(@inner_block) %>
         </div>
       </div>
