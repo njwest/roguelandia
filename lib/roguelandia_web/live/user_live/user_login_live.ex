@@ -3,7 +3,6 @@ defmodule RoguelandiaWeb.UserLive.UserLoginLive do
 
   def render(assigns) do
     ~H"""
-    <div>
     <.centered_dialogue id="login-dialogue" class="max-w-md">
       <.header class="text-center">
         Enter Roguelandia
@@ -33,7 +32,6 @@ defmodule RoguelandiaWeb.UserLive.UserLoginLive do
         </:actions>
       </.simple_form>
     </.centered_dialogue>
-    </div>
     """
   end
 
