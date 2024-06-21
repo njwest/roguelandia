@@ -40,8 +40,7 @@ defmodule Roguelandia.Game do
         Pawn.update_player(target, %{hp: target_new_hp})
       end
     end)
-    |> Multi.run(:give_attacker_exp, fn _repo, _changes_so_far ->
-      # TODO check player level up if game_over is true
+    |> Multi.run(:add_attacker_exp, fn _repo, _changes_so_far ->
       Pawn.update_player(attacker, %{experience: attacker.experience + 25})
     end)
     |> Multi.run(:battle, fn _repo, _changes_so_far ->
@@ -51,13 +50,36 @@ defmodule Roguelandia.Game do
         if game_over? and is_nil(battle.winner_id) do
           attrs
           |> Map.put(:winner_id, attacker_id)
-          |> Map.put(:game_over_text, "#{attacker.name} won by knocking out #{target.name}!")
+          |> Map.put(:game_over_text, "#{attacker.name} defeated #{target.name} and won!")
         else
           attrs
         end
 
       update_battle(battle, attrs)
     end)
+    |> Multi.run(:maybe_level_up_players, fn _repo, %{add_attacker_exp: %{level: attacker_level, experience: attacker_experience}} ->
+        if game_over? do
+          new_experience_total = attacker_experience + Levels.victory_exp(target.level)
+
+          attacker_player_result = Levels.maybe_level_up(attacker, new_experience_total)
+
+          target_player_result =
+            if target_new_hp > 0 do
+              Levels.maybe_level_up(target)
+            else
+              nil
+            end
+
+          case {attacker_player_result, target_player_result} do
+            {{:error, changeset}, _} -> {:error, changeset}
+            {_, {:error, changeset}} -> {:error, changeset}
+            {{:ok, new_attacker_player}, {:ok, new_target_player}} -> {:ok, [new_attacker_player, new_target_player]}
+            {{:ok, new_attacker_player}, nil} -> {:ok, [new_attacker_player, target]}
+          end
+        else
+          {:ok, nil}
+        end
+      end)
     |> Repo.transaction()
     |> case do
       {:ok, _result} ->
