@@ -25,7 +25,7 @@ defmodule RoguelandiaWeb.CoreComponents do
   def centered_dialogue(assigns) do
     ~H"""
       <div id={@id} class="flex vh-100">
-        <div class={["dialogue-border m-auto pt-4 p-2 sm:p-6 bg-white dark:bg-black w-full sm:w-auto content-center", @class]}>
+        <div class={["dialogue-border m-auto pt-4 p-2 sm:p-6 bg-zinc-200 dark:bg-black w-full sm:w-auto content-center", @class]}>
           <%= render_slot(@inner_block) %>
         </div>
       </div>
@@ -64,7 +64,7 @@ defmodule RoguelandiaWeb.CoreComponents do
       data-cancel={if @hideable, do: JS.exec(@on_cancel, "phx-remove"), else: nil}
       class="relative z-50 hidden"
     >
-      <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
+      <div id={"#{@id}-bg"} class="bg-zinc-50/90 dark:bg-zinc-800 fixed inset-0 transition-opacity" aria-hidden="true" />
       <div
         class="fixed inset-0 overflow-y-auto"
         aria-labelledby={"#{@id}-title"}
@@ -79,7 +79,7 @@ defmodule RoguelandiaWeb.CoreComponents do
               id={"#{@id}-container"}
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
-              class="dialogue-border relative hidden rounded-2xl px-8 md:px-14 py-6 shadow-lg transition"
+              class="dialogue-border relative hidden rounded-2xl px-8 md:px-14 py-6 shadow-lg transition bg-zinc-200 dark:bg-black"
             >
               <div :if={@hideable} class="absolute top-6 right-5">
                 <button

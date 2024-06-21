@@ -86,7 +86,7 @@
 
 
 .self-button{
-    @apply sm:text-2xl px-4 flex items-center justify-center border-4 border-cyan-400 border-dotted w-full select-none;
+    @apply sm:text-2xl px-4 flex items-center justify-center border-4 border-cyan-800 dark:border-cyan-400 border-dotted w-full select-none;
 }
 
 .inactive-button{
@@ -98,7 +98,7 @@
 }
 
 .hollow-button{
-    @apply border-4 border-brand hover:bg-brand px-3 sm:text-2xl grow select-none;
+    @apply border-4 border-brand hover:bg-brand hover:text-white px-3 sm:text-2xl grow select-none;
 }
 
 .radio-group {
