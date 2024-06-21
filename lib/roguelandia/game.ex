@@ -57,7 +57,7 @@ defmodule Roguelandia.Game do
 
       update_battle(battle, attrs)
     end)
-    |> Multi.run(:maybe_level_up_players, fn _repo, %{add_attacker_exp: %{level: attacker_level, experience: attacker_experience}} ->
+    |> Multi.run(:maybe_level_up_players, fn _repo, %{add_attacker_exp: %{experience: attacker_experience}} ->
         if game_over? do
           new_experience_total = attacker_experience + Levels.victory_exp(target.level)
 
