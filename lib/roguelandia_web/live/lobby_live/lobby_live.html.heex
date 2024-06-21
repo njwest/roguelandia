@@ -22,7 +22,7 @@
         </.header>
         <ul id="online_players" phx-update="stream" class="m-auto space-y-2">
             <%= for {dom_id, player} <- @streams.presences do %>
-                <button :if={@player.id != player.id and not is_nil(player.level)} id={dom_id} class="sm:text-2xl px-4 flex items-center justify-center border-4 border-brand hover:bg-brand w-full" type="button" phx-click="challenge" phx-value-player_id={player.id} phx-throttle={6000}>
+                <button :if={@player.id != player.id and not is_nil(player.level)} id={dom_id} class="hollow-button w-full" type="button" phx-click="challenge" phx-value-player_id={player.id} phx-throttle={6000}>
                     <%= player.name %>, Lvl <%= player.level %>
                 </button>
 
@@ -38,13 +38,13 @@
     </.centered_dialogue>
     <.modal :if={@challenge} id={"challenge-dialogue-#{@challenge.battle_id}"} hideable={false} show>
         <.header class="max-w-sm">
-            You've been challenged by <span class="inherit text-cyan-200"><%= @challenge.challenger_name %> (Lvl <%= @challenge.challenger_level %>)</span>!
+            You've been challenged by <span class="inherit text-cyan-800 dark:text-cyan-200"><%= @challenge.challenger_name %> (Lvl <%= @challenge.challenger_level %>)</span>!
         </.header>
         <div class="flex space-x-4 w-full mt-10">
             <button type="button" phx-click="accept" class="hollow-button" phx-throttle={8000}>
                 Battle!
             </button>
-            <button type="button" phx-click="decline" class="border-4 border-zinc-200 px-3 hover:bg-zinc-200 hover:text-brand sm:text-2xl grow select-none" phx-throttle={8000}>
+            <button type="button" phx-click="decline" class="border-4 border-zinc-800 dark:border-zinc-200 px-3 hover:bg-zinc-200 hover:text-brand sm:text-2xl grow select-none" phx-throttle={8000}>
                 Decline
             </button>
         </div>

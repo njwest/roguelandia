@@ -25,7 +25,7 @@ defmodule RoguelandiaWeb.CoreComponents do
   def centered_dialogue(assigns) do
     ~H"""
       <div id={@id} class="flex vh-100">
-        <div class={["dialogue-border m-auto p-2 sm:p-6", @class]}>
+        <div class={["dialogue-border m-auto pt-4 p-2 sm:p-6 bg-zinc-200 dark:bg-black w-full sm:w-auto content-center", @class]}>
           <%= render_slot(@inner_block) %>
         </div>
       </div>
@@ -64,7 +64,7 @@ defmodule RoguelandiaWeb.CoreComponents do
       data-cancel={if @hideable, do: JS.exec(@on_cancel, "phx-remove"), else: nil}
       class="relative z-50 hidden"
     >
-      <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
+      <div id={"#{@id}-bg"} class="bg-zinc-50/90 dark:bg-zinc-800 fixed inset-0 transition-opacity" aria-hidden="true" />
       <div
         class="fixed inset-0 overflow-y-auto"
         aria-labelledby={"#{@id}-title"}
@@ -79,7 +79,7 @@ defmodule RoguelandiaWeb.CoreComponents do
               id={"#{@id}-container"}
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
-              class="dialogue-border relative hidden rounded-2xl px-8 md:px-14 py-6 shadow-lg transition"
+              class="dialogue-border relative hidden rounded-2xl px-8 md:px-14 py-6 shadow-lg transition bg-zinc-200 dark:bg-black"
             >
               <div :if={@hideable} class="absolute top-6 right-5">
                 <button
@@ -215,7 +215,7 @@ defmodule RoguelandiaWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-3 space-y-4">
+      <div class="mt-1 space-y-3">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="pt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -354,7 +354,7 @@ defmodule RoguelandiaWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class="rounded border-zinc-800 text-mint-dark focus:ring-0"
           {@rest}
         />
         <%= @label %>
@@ -413,8 +413,8 @@ defmodule RoguelandiaWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "sm:text-lg block w-full rounded-lg text-zinc-900 focus:ring-0 sm:sm:leading-6",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          "sm:text-lg block w-full rounded-lg text-zinc-900 focus:ring-0 sm:sm:leading-6 border-zinc-800 border-4 ",
+          @errors == [] && "border-zinc-300 focus:border-mint-dark dark:focus:border-mint",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
@@ -465,7 +465,7 @@ defmodule RoguelandiaWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-xl sm:text-4xl leading-8 select-none">
+        <h1 class="text-2xl sm:text-4xl leading-8 select-none">
           <%= render_slot(@inner_block) %>
         </h1>
         <p :if={@subtitle != []} class="text-lg sm:text-2xl mt-2 leading-6 select-none">

@@ -11,10 +11,10 @@
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <body class="antialiased">
+  <body class="antialiased light-dark-theme">
     <ul class="fixed right-0 z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8">
       <%= if @current_user do %>
-        <li class="text-[0.8125rem] leading-6">
+        <li class="leading-6 bg-zinc-100 dark:bg-black bg-opacity-90 px-2 rounded-xl font-bold">
           <%= @current_user.player.name %>
         </li>
         <%!-- <li>
@@ -29,24 +29,24 @@
           <.link
             href={~p"/users/log_out"}
             method="delete"
-            class="text-[0.8125rem] leading-6 font-semibold hover:text-gray-200"
+            class="mini-menu-item"
           >
-            Log out
+            <%= gettext "Log out" %>
           </.link>
         </li>
       <% else %>
         <li>
           <.link
             href={~p"/users/register"}
-            class="text-[0.8125rem] leading-6 font-semiboldhover:text-gray-200"
+            class="mini-menu-item"
           >
-            Register
+            <%= gettext "Register" %>
           </.link>
         </li>
         <li>
           <.link
             href={~p"/users/log_in"}
-            class="text-[0.8125rem] leading-6 font-semibold hover:text-gray-200"
+            class="mini-menu-item"
           >
             Log in
           </.link>

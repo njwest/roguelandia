@@ -5,7 +5,7 @@
             <div class={"h-8 #{if 100 * (@opponent.hp / @opponent.max_hp) > 50, do: "bg-green-600", else: "bg-brand animate-pulse"}"} style={"width: #{100 * (@opponent.hp / @opponent.max_hp)}%"} />
         </div>
         <div class="inline-block max-w-content">
-            <h3 class="text-outline text-lg sm:text-2xl text-white font-medium rounded-lg py-1 px-2 select-none"><%= @opponent.name %>'s HP</h3>
+            <h3 class="text-outline text-lg sm:text-2xl black-white-bg font-medium rounded-lg py-1 px-2 select-none"><%= @opponent.name %>'s HP</h3>
         </div>
     </div>
     <div class="w-full h-[40%] flex justify-end items-end">
@@ -13,20 +13,20 @@
     </div>
     <div class="w-full sm:w-[95%] z-40 sm:mx-6 mb-2">
         <div class="inline-block max-w-content">
-            <h3 class="text-outline text-lg text-white font-medium rounded-lg py-1 px-2 select-none">Your HP</h3>
+            <h3 class="text-outline text-lg black-white-bg font-medium rounded-lg py-1 px-2 select-none">Your HP</h3>
         </div>
         <div class="border-8 border-gray-200 border-double rounded-lg bg-black">
             <div class={"h-6 #{if 100 * (@player.hp / @player.max_hp) > 50, do: "bg-green-600", else: "bg-brand animate-pulse"}"} style={"width: #{100 * (@player.hp / @player.max_hp)}%"} />
         </div>
     </div>
-    <div class="dialogue-box h-[50%] text-white flex flex-col bg-none">
+    <div class="dialogue-box h-[50%] flex flex-col">
         <div class="-mt-[20px] ml-[10px] bg-transparent">
-            <span class="text-lg sm:text-2xl md:text-4xl px-2 py-1 select-none bg-black rounded-md">
+            <span class="text-lg sm:text-2xl md:text-4xl px-2 py-1 select-none bg-zinc-200 dark:bg-black text-black dark:text-white rounded-md">
             <%= "Battle against #{@opponent.name}" %>
             </span>
         </div>
         <div class="overflow-y-auto flex flex-col justify-between h-full">
-            <p class="px-2 py-1 md:py-2 md:px-6 text-xl md:text-3xl lg:text-3xl text-white select-none ">
+            <p class="px-2 py-1 md:py-2 md:px-6 text-xl md:text-3xl lg:text-3xl select-none ">
                 <%= @action_text %><br />
                 <%= if @current_turn_player_id == @player.id, do: "It's your turn! Choose an action below.", else: "It's #{@opponent.name}'s turn." %> 
             </p>
@@ -39,7 +39,7 @@
                 >
                     <button 
                     type="button"
-                    class="text-xl sm:text-2xl lg:text-3xl font-medium pixel-text"
+                    class="text-xl sm:text-2xl lg:text-3xl font-medium"
                     >
                         Attack
                     </button>
@@ -50,7 +50,7 @@
                 >
                     <button 
                     type="button"
-                    class="text-xl sm:text-2xl lg:text-3xl font-medium pixel-text"
+                    class="text-xl sm:text-2xl lg:text-3xl font-medium"
                     >
                         Flee
                     </button>
