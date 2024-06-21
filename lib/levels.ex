@@ -37,6 +37,9 @@ defmodule Levels do
 
   @doc """
   Maybe level up a player based on an experience total.
+
+  If the experience total includes new experience, update the player with new experience.
+
   This is used for when a player gains experience at the same time
   as a level check, e.g. they win a battle.
 
