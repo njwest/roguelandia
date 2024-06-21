@@ -105,8 +105,8 @@ defmodule Roguelandia.Game do
 
         Multi.new()
         |> Multi.run(:give_remainer_exp, fn _repo, _changes_so_far ->
-          # TODO check player level up
-          Pawn.update_player(remainer, %{experience: remainer.experience + 50})
+          new_exp_total = remainer.experience + 30
+          Levels.maybe_level_up(remainer, new_exp_total)
         end)
         |> Multi.run(:battle, fn _repo, _changes_so_far ->
           update_battle(battle, %{active: false, game_over_text: "#{player.name} fled, #{remainer.name} won!", winner_id: remainer.id})
