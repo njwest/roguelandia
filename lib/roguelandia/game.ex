@@ -50,7 +50,7 @@ defmodule Roguelandia.Game do
         if game_over? and is_nil(battle.winner_id) do
           attrs
           |> Map.put(:winner_id, attacker_id)
-          |> Map.put(:game_over_text, "#{attacker.name} defeated #{target.name} and won!")
+          |> Map.put(:game_over_text, "#{target.name} was defeated, #{attacker.name} is victorious!")
         else
           attrs
         end
@@ -109,7 +109,7 @@ defmodule Roguelandia.Game do
           Levels.maybe_level_up(remainer, new_exp_total)
         end)
         |> Multi.run(:battle, fn _repo, _changes_so_far ->
-          update_battle(battle, %{active: false, game_over_text: "#{player.name} fled, #{remainer.name} won!", winner_id: remainer.id})
+          update_battle(battle, %{active: false, game_over_text: "#{player.name} fled, #{remainer.name} is victorious!", winner_id: remainer.id})
         end)
         |> Repo.transaction()
         |> case do
@@ -132,11 +132,6 @@ defmodule Roguelandia.Game do
         end
     end
   end
-
-  # defp give_exp(player, exp) do
-    ## TODO Level up logic in here
-    ## after battle is over
-  # end
 
   def find_participant(battle, player_id) do
     Enum.find(battle.participants, fn participant -> participant.id == player_id end)
