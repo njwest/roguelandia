@@ -18,10 +18,12 @@ defmodule Roguelandia.Application do
       # {Roguelandia.Worker, arg},
       RoguelandiaWeb.Presence,
       RoguelandiaWeb.Endpoint,
-      # Start a dynamic supervisor for battle servers
+      # Start dynamic supervisors
       {DynamicSupervisor, strategy: :one_for_one, name: BattleSupervisor},
-      # Start a registry for battle servers
-      Registry.child_spec(keys: :unique, name: BattleRegistry)
+      {DynamicSupervisor, strategy: :one_for_one, name: NPCSupervisor},
+      # Start registries
+      Registry.child_spec(keys: :unique, name: BattleRegistry),
+      Registry.child_spec(keys: :unique, name: NPCRegistry),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

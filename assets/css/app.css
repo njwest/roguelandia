@@ -26,7 +26,7 @@
     background-size: cover;
 } */
 
-.vh-100 {
+.vh-100{
     height: 100vh;
     height: -webkit-calc(var(--vh, 1vh) * 100);
     height: -moz-calc(var(--vh, 1vh) * 100);
@@ -42,62 +42,37 @@
     display: flex;
     top: 0;
     left: 0;
- }
+}
 
 .dialogue-border{
     @apply rounded-lg border-8 border-double border-black dark:border-white;
 }
 
- .dialogue-box{
+.dialogue-box{
     @apply w-full bg-white text-black border-black dark:bg-black dark:text-white dark:border-white bg-opacity-90 border-[10px] border-double rounded-lg;
- }
+}
 
- .black-white-bg{
+.black-white-bg{
     @apply text-black dark:text-white bg-white dark:bg-black bg-opacity-90;
- }
+}
 
- .mini-menu-item{
+.mini-menu-item {
     @apply black-white-bg py-1 px-2 leading-6 font-semibold hover:text-brand;
- }
+}
 
-
-/* .dialogue-border{
-    border-radius: 10px;
-    border-style: double;
-    border-color: white;
-    border: 8px double white;
-} */
-/* 
- .dialogue-box{
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.9);;
-    border-radius: 10px;
-    border-style: double;
-    border-color: white;
-    border: 8px double white;
- } */
- 
- /* .bg-skull-entrance {
-    background: url('/images/Dungeon-door-skull.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-} */
-
-
-.self-button{
+.self-button {
     @apply sm:text-2xl px-4 flex items-center justify-center border-4 border-cyan-800 dark:border-cyan-400 border-dotted w-full select-none;
 }
 
-.inactive-button{
+.inactive-button {
     @apply sm:text-2xl px-4 flex items-center justify-center border-4 border-brand border-dashed w-full select-none;
 }
 
-.action-button{
+.action-button {
     @apply border-b-2 border-double hover:border-green-500 py-2 text-center bg-cyan-800 hover:text-green-400 hover:bg-cyan-900 cursor-pointer;
 }
 
-.hollow-button{
+.hollow-button {
     @apply border-4 border-brand hover:bg-brand hover:text-white px-3 sm:text-2xl grow select-none;
 }
 
@@ -129,3 +104,11 @@ input[type="radio"]:checked + .radio-label {
 input[type="radio"]:checked + .radio-label img {
     @apply grayscale-0;
 }
+
+
+ /* .bg-skull-entrance {
+    background: url('/images/Dungeon-door-skull.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+} */
