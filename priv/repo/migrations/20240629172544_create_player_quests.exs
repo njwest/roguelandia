@@ -4,6 +4,8 @@ defmodule Roguelandia.Repo.Migrations.CreatePlayerQuests do
   def change do
     create table(:player_quests) do
       add :state, :map
+      add :active?, :boolean
+
       add :player_id, references(:players, on_delete: :nothing)
       add :quest_id, references(:quests, on_delete: :nothing)
 

@@ -13,28 +13,41 @@
             user_id={@current_user.id}
         />
     <% else %>
-    <.centered_dialogue id="lobby" >
-        <.header class="text-center">
-            Lobby
-            <:subtitle>
-                Challenge a Player
-            </:subtitle>
-        </.header>
-        <ul id="online_players" phx-update="stream" class="m-auto space-y-2">
-            <%= for {dom_id, player} <- @streams.presences do %>
-                <button :if={@player.id != player.id and not is_nil(player.level)} id={dom_id} class="hollow-button w-full" type="button" phx-click="challenge" phx-value-player_id={player.id} phx-throttle={6000}>
-                    <%= player.name %>, Lvl <%= player.level %>
-                </button>
+    <.centered_dialogue id="lobby" class="sm:flex sm:divide-x-2">
+        <div class="sm:pr-6">
+            <.header class="text-center">
+                PVP Lobby
+                <:subtitle>
+                    Challenge a Player
+                </:subtitle>
+            </.header>
+            <ul id="online_players" phx-update="stream" class="m-auto space-y-2">
+                <%= for {dom_id, player} <- @streams.presences do %>
+                    <button :if={@player.id != player.id and not is_nil(player.level)} id={dom_id} class="hollow-button w-full" type="button" phx-click="challenge" phx-value-player_id={player.id} phx-throttle={6000}>
+                        <%= player.name %>, Lvl <%= player.level %>
+                    </button>
 
-                <button :if={@player.id != player.id and is_nil(player.level)} id={dom_id} class="inactive-button" type="button" disabled>
-                    <%= player.name %> is Selecting a Class
-                </button>
+                    <button :if={@player.id != player.id and is_nil(player.level)} id={dom_id} class="inactive-button" type="button" disabled>
+                        <%= player.name %> is Selecting a Class
+                    </button>
 
-                <button id={dom_id} :if={@player.id == player.id} class="self-button" type="button" disabled title="This is you.">
-                    <%= player.name %>, Lvl <%= player.level %>
-                </button>
-            <% end %>
-        </ul>
+                    <button id={dom_id} :if={@player.id == player.id} class="self-button" type="button" disabled title="This is you.">
+                        <%= player.name %>, Lvl <%= player.level %>
+                    </button>
+                <% end %>
+            </ul>
+        </div>
+        <div class="sm:pl-6">
+            <.header class="text-center">
+                Quests
+                <:subtitle>
+                    Explore Roguelandia
+                </:subtitle>
+            </.header>
+            <button class="hollow-button w-full gold-button cursor-pentagram" type="button">
+                Cemetery
+            </button>
+        </div>
     </.centered_dialogue>
     <.modal :if={@challenge} id={"challenge-dialogue-#{@challenge.battle_id}"} hideable={false} show>
         <.header class="max-w-sm">
