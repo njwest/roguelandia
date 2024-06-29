@@ -76,6 +76,19 @@
     @apply border-4 border-brand hover:bg-brand hover:text-white px-3 sm:text-2xl grow select-none;
 }
 
+.border-groove {border-style: groove;}
+.border-ridge {border-style: ridge;}
+.border-inset {border-style: inset;}
+.border-outset {border-style: outset;}
+
+.gold-button {
+    @apply border-gold-dark hover:bg-gold hover:text-black border-outset;
+}
+
+.cursor-grave{
+    cursor: url('/images/cursors/grave.png'), auto;
+}
+
 .radio-group {
     display: flex;
     gap: 20px;

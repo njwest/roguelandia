@@ -20,6 +20,10 @@ module.exports = {
           dark: "#3b7960",
           black: "#291f3e",
           yellow: "#f4f2af"
+        },
+        gold: {
+          DEFAULT: "#ffcf40",
+          dark: "#ffbf00"
         }
       }
     },
