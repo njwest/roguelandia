@@ -1,0 +1,50 @@
+<.header>
+  Listing Bots
+  <:actions>
+    <.link patch={~p"/bots/new"}>
+      <.button>New Bot</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="bots"
+  rows={@streams.bots}
+  row_click={fn {_id, bot} -> JS.navigate(~p"/bots/#{bot}") end}
+>
+  <:col :let={{_id, bot}} label="Name"><%= bot.name %></:col>
+  <:col :let={{_id, bot}} label="Level"><%= bot.level %></:col>
+  <:col :let={{_id, bot}} label="Experience"><%= bot.experience %></:col>
+  <:col :let={{_id, bot}} label="Special"><%= bot.special %></:col>
+  <:col :let={{_id, bot}} label="Hp"><%= bot.hp %></:col>
+  <:col :let={{_id, bot}} label="Max hp"><%= bot.max_hp %></:col>
+  <:col :let={{_id, bot}} label="Attack"><%= bot.attack %></:col>
+  <:col :let={{_id, bot}} label="Strength"><%= bot.strength %></:col>
+  <:col :let={{_id, bot}} label="Sprite url"><%= bot.sprite_url %></:col>
+  <:col :let={{_id, bot}} label="Attitude"><%= bot.attitude %></:col>
+  <:action :let={{_id, bot}}>
+    <div class="sr-only">
+      <.link navigate={~p"/bots/#{bot}"}>Show</.link>
+    </div>
+    <.link patch={~p"/bots/#{bot}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, bot}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: bot.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="bot-modal" show on_cancel={JS.patch(~p"/bots")}>
+  <.live_component
+    module={RoguelandiaWeb.BotLive.FormComponent}
+    id={@bot.id || :new}
+    title={@page_title}
+    action={@live_action}
+    bot={@bot}
+    patch={~p"/bots"}
+  />
+</.modal>

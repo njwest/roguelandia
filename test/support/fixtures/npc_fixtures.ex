@@ -22,4 +22,27 @@ defmodule Roguelandia.NPCFixtures do
 
     boss
   end
+
+  @doc """
+  Generate a bot.
+  """
+  def bot_fixture(attrs \\ %{}) do
+    {:ok, bot} =
+      attrs
+      |> Enum.into(%{
+        attack: "some attack",
+        attitude: :hostile,
+        experience: 42,
+        hp: 42,
+        level: 42,
+        max_hp: 42,
+        name: "some name",
+        special: "some special",
+        sprite_url: "some sprite_url",
+        strength: 42
+      })
+      |> Roguelandia.NPC.create_bot()
+
+    bot
+  end
 end

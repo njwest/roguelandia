@@ -66,4 +66,76 @@ defmodule Roguelandia.NPCTest do
       assert %Ecto.Changeset{} = NPC.change_boss(boss)
     end
   end
+
+  describe "bots" do
+    alias Roguelandia.NPC.Bot
+
+    import Roguelandia.NPCFixtures
+
+    @invalid_attrs %{name: nil, level: nil, special: nil, experience: nil, hp: nil, max_hp: nil, attack: nil, strength: nil, sprite_url: nil, attitude: nil}
+
+    test "list_bots/0 returns all bots" do
+      bot = bot_fixture()
+      assert NPC.list_bots() == [bot]
+    end
+
+    test "get_bot!/1 returns the bot with given id" do
+      bot = bot_fixture()
+      assert NPC.get_bot!(bot.id) == bot
+    end
+
+    test "create_bot/1 with valid data creates a bot" do
+      valid_attrs = %{name: "some name", level: 42, special: "some special", experience: 42, hp: 42, max_hp: 42, attack: "some attack", strength: 42, sprite_url: "some sprite_url", attitude: :hostile}
+
+      assert {:ok, %Bot{} = bot} = NPC.create_bot(valid_attrs)
+      assert bot.name == "some name"
+      assert bot.level == 42
+      assert bot.special == "some special"
+      assert bot.experience == 42
+      assert bot.hp == 42
+      assert bot.max_hp == 42
+      assert bot.attack == "some attack"
+      assert bot.strength == 42
+      assert bot.sprite_url == "some sprite_url"
+      assert bot.attitude == :hostile
+    end
+
+    test "create_bot/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = NPC.create_bot(@invalid_attrs)
+    end
+
+    test "update_bot/2 with valid data updates the bot" do
+      bot = bot_fixture()
+      update_attrs = %{name: "some updated name", level: 43, special: "some updated special", experience: 43, hp: 43, max_hp: 43, attack: "some updated attack", strength: 43, sprite_url: "some updated sprite_url", attitude: :friendly}
+
+      assert {:ok, %Bot{} = bot} = NPC.update_bot(bot, update_attrs)
+      assert bot.name == "some updated name"
+      assert bot.level == 43
+      assert bot.special == "some updated special"
+      assert bot.experience == 43
+      assert bot.hp == 43
+      assert bot.max_hp == 43
+      assert bot.attack == "some updated attack"
+      assert bot.strength == 43
+      assert bot.sprite_url == "some updated sprite_url"
+      assert bot.attitude == :friendly
+    end
+
+    test "update_bot/2 with invalid data returns error changeset" do
+      bot = bot_fixture()
+      assert {:error, %Ecto.Changeset{}} = NPC.update_bot(bot, @invalid_attrs)
+      assert bot == NPC.get_bot!(bot.id)
+    end
+
+    test "delete_bot/1 deletes the bot" do
+      bot = bot_fixture()
+      assert {:ok, %Bot{}} = NPC.delete_bot(bot)
+      assert_raise Ecto.NoResultsError, fn -> NPC.get_bot!(bot.id) end
+    end
+
+    test "change_bot/1 returns a bot changeset" do
+      bot = bot_fixture()
+      assert %Ecto.Changeset{} = NPC.change_bot(bot)
+    end
+  end
 end
