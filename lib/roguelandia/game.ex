@@ -411,4 +411,196 @@ defmodule Roguelandia.Game do
   def change_battle_player(%BattlePlayer{} = battle_player, attrs \\ %{}) do
     BattlePlayer.changeset(battle_player, attrs)
   end
+
+  alias Roguelandia.Game.Quest
+
+  @doc """
+  Returns the list of quests.
+
+  ## Examples
+
+      iex> list_quests()
+      [%Quest{}, ...]
+
+  """
+  def list_quests do
+    Repo.all(Quest)
+  end
+
+  @doc """
+  Gets a single quest.
+
+  Raises `Ecto.NoResultsError` if the Quest does not exist.
+
+  ## Examples
+
+      iex> get_quest!(123)
+      %Quest{}
+
+      iex> get_quest!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_quest!(id), do: Repo.get!(Quest, id)
+
+  @doc """
+  Creates a quest.
+
+  ## Examples
+
+      iex> create_quest(%{field: value})
+      {:ok, %Quest{}}
+
+      iex> create_quest(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_quest(attrs \\ %{}) do
+    %Quest{}
+    |> Quest.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a quest.
+
+  ## Examples
+
+      iex> update_quest(quest, %{field: new_value})
+      {:ok, %Quest{}}
+
+      iex> update_quest(quest, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_quest(%Quest{} = quest, attrs) do
+    quest
+    |> Quest.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a quest.
+
+  ## Examples
+
+      iex> delete_quest(quest)
+      {:ok, %Quest{}}
+
+      iex> delete_quest(quest)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_quest(%Quest{} = quest) do
+    Repo.delete(quest)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking quest changes.
+
+  ## Examples
+
+      iex> change_quest(quest)
+      %Ecto.Changeset{data: %Quest{}}
+
+  """
+  def change_quest(%Quest{} = quest, attrs \\ %{}) do
+    Quest.changeset(quest, attrs)
+  end
+
+  alias Roguelandia.Game.PlayerQuest
+
+  @doc """
+  Returns the list of player_quests.
+
+  ## Examples
+
+      iex> list_player_quests()
+      [%PlayerQuest{}, ...]
+
+  """
+  def list_player_quests do
+    Repo.all(PlayerQuest)
+  end
+
+  @doc """
+  Gets a single player_quest.
+
+  Raises `Ecto.NoResultsError` if the Player quest does not exist.
+
+  ## Examples
+
+      iex> get_player_quest!(123)
+      %PlayerQuest{}
+
+      iex> get_player_quest!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_player_quest!(id), do: Repo.get!(PlayerQuest, id)
+
+  @doc """
+  Creates a player_quest.
+
+  ## Examples
+
+      iex> create_player_quest(%{field: value})
+      {:ok, %PlayerQuest{}}
+
+      iex> create_player_quest(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_player_quest(attrs \\ %{}) do
+    %PlayerQuest{}
+    |> PlayerQuest.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a player_quest.
+
+  ## Examples
+
+      iex> update_player_quest(player_quest, %{field: new_value})
+      {:ok, %PlayerQuest{}}
+
+      iex> update_player_quest(player_quest, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_player_quest(%PlayerQuest{} = player_quest, attrs) do
+    player_quest
+    |> PlayerQuest.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a player_quest.
+
+  ## Examples
+
+      iex> delete_player_quest(player_quest)
+      {:ok, %PlayerQuest{}}
+
+      iex> delete_player_quest(player_quest)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_player_quest(%PlayerQuest{} = player_quest) do
+    Repo.delete(player_quest)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking player_quest changes.
+
+  ## Examples
+
+      iex> change_player_quest(player_quest)
+      %Ecto.Changeset{data: %PlayerQuest{}}
+
+  """
+  def change_player_quest(%PlayerQuest{} = player_quest, attrs \\ %{}) do
+    PlayerQuest.changeset(player_quest, attrs)
+  end
 end

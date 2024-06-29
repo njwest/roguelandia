@@ -69,12 +69,14 @@ defmodule RoguelandiaWeb.Router do
       live "/users/settings", UserLive.UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserLive.UserSettingsLive, :confirm_email
 
-      live "/bosses", BossLive.Index, :index
-      live "/bosses/new", BossLive.Index, :new
-      live "/bosses/:id/edit", BossLive.Index, :edit
+      live "/quest", QuestLive, :quest
 
-      live "/bosses/:id", BossLive.Show, :show
-      live "/bosses/:id/show/edit", BossLive.Show, :edit
+      # live "/bosses", BossLive.Index, :index
+      # live "/bosses/new", BossLive.Index, :new
+      # live "/bosses/:id/edit", BossLive.Index, :edit
+
+      # live "/bosses/:id", BossLive.Show, :show
+      # live "/bosses/:id/show/edit", BossLive.Show, :edit
 
       # TODO put behind admin wall
       # live "/classes", ClassLive.Index, :index

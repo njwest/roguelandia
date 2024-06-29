@@ -106,4 +106,112 @@ defmodule Roguelandia.GameTest do
       assert %Ecto.Changeset{} = Game.change_battle_player(battle_player)
     end
   end
+
+  describe "quests" do
+    alias Roguelandia.Game.Quest
+
+    import Roguelandia.GameFixtures
+
+    @invalid_attrs %{name: nil, config: nil}
+
+    test "list_quests/0 returns all quests" do
+      quest = quest_fixture()
+      assert Game.list_quests() == [quest]
+    end
+
+    test "get_quest!/1 returns the quest with given id" do
+      quest = quest_fixture()
+      assert Game.get_quest!(quest.id) == quest
+    end
+
+    test "create_quest/1 with valid data creates a quest" do
+      valid_attrs = %{name: "some name", config: %{}}
+
+      assert {:ok, %Quest{} = quest} = Game.create_quest(valid_attrs)
+      assert quest.name == "some name"
+      assert quest.config == %{}
+    end
+
+    test "create_quest/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Game.create_quest(@invalid_attrs)
+    end
+
+    test "update_quest/2 with valid data updates the quest" do
+      quest = quest_fixture()
+      update_attrs = %{name: "some updated name", config: %{}}
+
+      assert {:ok, %Quest{} = quest} = Game.update_quest(quest, update_attrs)
+      assert quest.name == "some updated name"
+      assert quest.config == %{}
+    end
+
+    test "update_quest/2 with invalid data returns error changeset" do
+      quest = quest_fixture()
+      assert {:error, %Ecto.Changeset{}} = Game.update_quest(quest, @invalid_attrs)
+      assert quest == Game.get_quest!(quest.id)
+    end
+
+    test "delete_quest/1 deletes the quest" do
+      quest = quest_fixture()
+      assert {:ok, %Quest{}} = Game.delete_quest(quest)
+      assert_raise Ecto.NoResultsError, fn -> Game.get_quest!(quest.id) end
+    end
+
+    test "change_quest/1 returns a quest changeset" do
+      quest = quest_fixture()
+      assert %Ecto.Changeset{} = Game.change_quest(quest)
+    end
+  end
+
+  describe "player_quests" do
+    alias Roguelandia.Game.PlayerQuest
+
+    import Roguelandia.GameFixtures
+
+    @invalid_attrs %{}
+
+    test "list_player_quests/0 returns all player_quests" do
+      player_quest = player_quest_fixture()
+      assert Game.list_player_quests() == [player_quest]
+    end
+
+    test "get_player_quest!/1 returns the player_quest with given id" do
+      player_quest = player_quest_fixture()
+      assert Game.get_player_quest!(player_quest.id) == player_quest
+    end
+
+    test "create_player_quest/1 with valid data creates a player_quest" do
+      valid_attrs = %{}
+
+      assert {:ok, %PlayerQuest{} = player_quest} = Game.create_player_quest(valid_attrs)
+    end
+
+    test "create_player_quest/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Game.create_player_quest(@invalid_attrs)
+    end
+
+    test "update_player_quest/2 with valid data updates the player_quest" do
+      player_quest = player_quest_fixture()
+      update_attrs = %{}
+
+      assert {:ok, %PlayerQuest{} = player_quest} = Game.update_player_quest(player_quest, update_attrs)
+    end
+
+    test "update_player_quest/2 with invalid data returns error changeset" do
+      player_quest = player_quest_fixture()
+      assert {:error, %Ecto.Changeset{}} = Game.update_player_quest(player_quest, @invalid_attrs)
+      assert player_quest == Game.get_player_quest!(player_quest.id)
+    end
+
+    test "delete_player_quest/1 deletes the player_quest" do
+      player_quest = player_quest_fixture()
+      assert {:ok, %PlayerQuest{}} = Game.delete_player_quest(player_quest)
+      assert_raise Ecto.NoResultsError, fn -> Game.get_player_quest!(player_quest.id) end
+    end
+
+    test "change_player_quest/1 returns a player_quest changeset" do
+      player_quest = player_quest_fixture()
+      assert %Ecto.Changeset{} = Game.change_player_quest(player_quest)
+    end
+  end
 end

@@ -4,7 +4,7 @@ defmodule Roguelandia.Pawn.Player do
 
   alias Roguelandia.Accounts.User
   alias Roguelandia.Pawn.Class
-  alias Roguelandia.Game.BattlePlayer
+  alias Roguelandia.Game.{PlayerQuest, BattlePlayer}
 
   schema "players" do
     field :name, :string
@@ -20,6 +20,9 @@ defmodule Roguelandia.Pawn.Player do
     belongs_to :class, Class
     has_many :battle_players, BattlePlayer
     has_many :battles, through: [:battle_players, :battle]
+
+    has_many :player_quests, PlayerQuest
+    has_many :quests, through: [:player_quests, :quest]
 
     timestamps(type: :utc_datetime)
   end

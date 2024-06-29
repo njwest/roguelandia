@@ -31,4 +31,33 @@ defmodule Roguelandia.GameFixtures do
 
     battle_player
   end
+
+  @doc """
+  Generate a quest.
+  """
+  def quest_fixture(attrs \\ %{}) do
+    {:ok, quest} =
+      attrs
+      |> Enum.into(%{
+        config: %{},
+        name: "some name"
+      })
+      |> Roguelandia.Game.create_quest()
+
+    quest
+  end
+
+  @doc """
+  Generate a player_quest.
+  """
+  def player_quest_fixture(attrs \\ %{}) do
+    {:ok, player_quest} =
+      attrs
+      |> Enum.into(%{
+
+      })
+      |> Roguelandia.Game.create_player_quest()
+
+    player_quest
+  end
 end
